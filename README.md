@@ -23,6 +23,8 @@ Applications include:
     When transforming the same code twice, the second transformation should be instant.
     This is important for rapid development cycles.
 4. Transformations should be pluggable, it should be easy to contribute plugins that add new transformations not considered yet
+5. Package developers/contributors should get a clear error message if e.g. rpp is not installed
+6. If files are generated, they should receive a "read-only" label that's picked up (at least) by RStudio; maybe it's worth marking the generated files as read-only too?
 
 ## Implementation options
 
