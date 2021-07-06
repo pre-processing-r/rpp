@@ -18,6 +18,7 @@ Applications include:
 2. Ideally, the transformations occur during the following steps:
     - `R CMD build`: always
     - `pkgload::load_all()`: optionally, triggered through an environment variable, option, or configuration
+
     Specifically, the transformation must not require any dependencies during installation or execution time of the target package.
 3. A no-op transformation should be fast.
     When transforming the same code twice, the second transformation should be instant.
@@ -42,4 +43,5 @@ I see two possible entry points
 ### `aaa.R`
 
 - Safe with `--vanilla`
-- Requires all `.R` files to be present in the directory
+- Requires all `.R` files to be present in the directory, we can warn and ask the user to rebuild
+- The file will exist unchanged in the built package but must not produce any effect. Maybe check with `if (requireNamespace("rpp", quietly = TRUE)) {}` ?
