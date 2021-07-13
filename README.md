@@ -14,8 +14,9 @@ Applications include:
 
 ## Constraints
 
-1. At any point in time, the code stored in version control should reflect the state most useful during *development*.
-2. Ideally, the transformations occur during the following steps:
+1. At any point in time, the code stored in version control should reflect the state most useful during *production*.
+    - Rationale: `devtools::install_github()` should "just work" and give you a package that you can already use.
+3. Ideally, the transformations occur during the following steps:
     - `R CMD build`: always
     - `pkgload::load_all()`: optionally, triggered through an environment variable, option, or configuration
 
