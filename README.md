@@ -18,6 +18,8 @@ Applications include:
 
 Works for assertions and logging.
 
+Prerequisite: we don't add or remove extra lines.
+
 Pros: doesn't need any extra files
 
 Cons: transformation must be bidirectional (or at least work in the reverse way)
