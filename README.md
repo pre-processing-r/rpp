@@ -12,6 +12,24 @@ Applications include:
 - Verbatim code inlining and expansion to simplify metaprogramming
 - Static type annotations
 
+## Location of the "source of truth"
+
+### Inline
+
+Works for assertions and logging.
+
+Pros: doesn't need any extra files
+
+Cons: transformation must be bidirectional (or at least work in the reverse way)
+
+### Parallel directory
+
+Required for inlining/expansion and static type annotations.
+
+Pros: Works for all cases
+
+Cons: Entirely new infrastructure
+
 ## Constraints
 
 1. At any point in time, the code stored in version control should reflect the state most useful during *production*.
