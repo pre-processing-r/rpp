@@ -1,0 +1,17 @@
+Package: rpp
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Date: 2021-08-26
+Authors@R: 
+    person(given = "Kirill",
+           family = "Müller",
+           role = c("aut", "cre"),
+           email = "krlmlr+r@mailbox.org",
+           comment = c(ORCID = "0000-0002-1416-3412"))
+Description: What the package does (one paragraph).
+License: GPL-3
+URL: https://github.com/krlmlr/rpp, https://krlmlr.github.io/rpp
+BugReports: https://github.com/krlmlr/rpp/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1.9001
