@@ -1,10 +1,10 @@
 #' @export
-rpp_roclet <- function() {
-  roclet("rpp")
+rpp_prod_roclet <- function() {
+  roclet("rpp_prod")
 }
 
 #' @export
-roclet_process.roclet_rpp <- function(x, blocks, env, base_path, ...) {
+roclet_process.roclet_rpp_prod <- function(x, blocks, env, base_path, ...) {
   stopifnot(roxy_meta_get("load") %in% c("pkgload", "source"))
 
   plugins_text <- desc::desc_get("Config/rpp/plugins")
@@ -19,7 +19,7 @@ roclet_process.roclet_rpp <- function(x, blocks, env, base_path, ...) {
 }
 
 #' @export
-roclet_output.roclet_rpp <- function(x, results, base_path, ...) {
+roclet_output.roclet_rpp_prod <- function(x, results, base_path, ...) {
   files <- names(results$files)
   plugins <- results$plugins
   clean <- compact(map(plugins, "clean"))
