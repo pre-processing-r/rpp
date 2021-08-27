@@ -2,6 +2,7 @@ get_plugins <- function() {
   plugins_text <- desc::desc_get("Config/rpp/plugins")
   plugins <- eval(parse(text = plugins_text), baseenv())
   stopifnot(rlang::is_bare_list(plugins))
+  plugins
 }
 
 in_place_transform <- function(path, transforms) {
