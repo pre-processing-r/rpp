@@ -27,9 +27,9 @@ roclet_process.roclet_rpp_prod <- function(x, blocks, env, base_path, ...) {
 roclet_output.roclet_rpp_prod <- function(x, results, base_path, ...) {
   files <- names(results$files)
   plugins <- results$plugins
-  clean <- compact(map(plugins, "clean"))
+  prod <- compact(map(plugins, "prod"))
 
-  walk(files, in_place_transform, clean)
+  walk(files, in_place_transform, prod)
 }
 
 in_place_transform <- function(path, transforms) {
