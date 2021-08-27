@@ -12,12 +12,8 @@ rpp_dev_roclet <- function() {
 roclet_process.roclet_rpp_dev <- function(x, blocks, env, base_path, ...) {
   stopifnot(roxy_meta_get("load") %in% c("pkgload", "source"))
 
-  plugins_text <- desc::desc_get("Config/rpp/plugins")
-  plugins <- eval(parse(text = plugins_text), baseenv())
-  stopifnot(rlang::is_bare_list(plugins))
-
   list(
-    plugins = plugins,
+    plugins = get_plugins(),
     # FIXME: Add richer information from blocks
     files = rlang::set_names(dir("R", full.names = TRUE))
   )
