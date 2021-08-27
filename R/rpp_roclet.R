@@ -1,4 +1,9 @@
 #' @export
+rpp_prod <- function() {
+  roxygenize(roclets = "rpp_prod_roclet", load_code = "source")
+}
+
+#' @export
 rpp_prod_roclet <- function() {
   roclet("rpp_prod")
 }

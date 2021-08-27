@@ -3,6 +3,7 @@
 S3method(roclet_output,roclet_rpp_prod)
 S3method(roclet_process,roclet_rpp_prod)
 export(declare_inline_plugin)
+export(rpp_prod)
 export(rpp_prod_roclet)
 import(purrr)
 import(roxygen2)
