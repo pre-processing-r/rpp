@@ -7,6 +7,7 @@ test_that("Argument types", {
 test_that("Return values", {
   expect_q_snapshot("Integer()? function(a = 0L ?Integer()) {}")
   expect_q_snapshot("fun <- (Integer()? function(a = 0L ?Integer()) {})")
+  # FIXME: How to make this work?
   expect_q_snapshot("fun <- Integer()? function(a = 0L ?Integer()) {}")
 })
 
