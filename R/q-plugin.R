@@ -14,8 +14,8 @@ q_elide <- function(lines) {
     lines %>%
     styler:::compute_parse_data_nested(NULL, 0) %>%
     # FIXME: We should be eliding the argument type only for functions.
-    elide_types() %>%
     elide_arg_type() %>%
+    elide_types() %>%
     unnest_pd()
 
   new_lines <- strsplit(new_lines, "\n")[[1]]
@@ -93,7 +93,7 @@ elide_one_arg_type <- function(x) {
   idx <- which(x$token == "'?'" & x$terminal)
   if (length(idx) > 0) {
     stopifnot(length(idx) ==  1)
-    x <- x[rlang::seq2(idx + 1, nrow(x)), ]
+    x <- x[seq_len(idx - 1), ]
   }
 
   x
