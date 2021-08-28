@@ -6,15 +6,15 @@ q_uncomment <- function(lines) {
 q_elide <- function(lines) {
   # HACK: speed up for files that are not annotated
   # FIXME: use caching like styler does
-  if (!length(grep("Character|Integer", lines))) {
+  if (!length(grep("[?]", lines))) {
     return(lines)
   }
-
-  # FIXME: elide_return_type() and elide_var_type()
 
   new_lines <-
     lines %>%
     styler:::compute_parse_data_nested(NULL, 0) %>%
+    # FIXME: We should be eliding the argument type only for functions.
+    elide_types() %>%
     elide_arg_type() %>%
     unnest_pd()
 
@@ -96,6 +96,17 @@ elide_one_arg_type <- function(x) {
     x <- x[rlang::seq2(idx + 1, nrow(x)), ]
   }
 
+  x
+}
+
+elide_types <- function(x) {
+  idx <- which(x$token == "'?'" & x$terminal)
+  if (length(idx) > 0) {
+    x <- x$child[[idx + 1]]
+  }
+
+  is_leaf <- purrr::map_lgl(x$child, is.null)
+  x$child[!is_leaf] <- purrr::map(x$child[!is_leaf], elide_types)
   x
 }
 
