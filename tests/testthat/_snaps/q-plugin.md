@@ -15,16 +15,16 @@
 ---
 
     Code
-      writeLines(q_elide("?function(a = 0L?Integer()) {}"))
+      writeLines(q_elide("?function(a = 0L ?Integer()) {}"))
     Output
-      function(a = 0L) {} # !q ?function(a = 0L?Integer()) {}
+      function(a = 0L) {} # !q ?function(a = 0L ?Integer()) {}
 
 ---
 
     Code
-      writeLines(q_elide("Integer()? function(a = 0L?Integer()) {}"))
+      writeLines(q_elide("Integer()? function(a = 0L ?Integer()) {}"))
     Output
-      function(a = 0L) {} # !q Integer()? function(a = 0L?Integer()) {}
+      function(a = 0L) {} # !q Integer()? function(a = 0L ?Integer()) {}
 
 ---
 
