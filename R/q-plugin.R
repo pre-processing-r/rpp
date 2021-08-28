@@ -20,6 +20,20 @@ q_elide <- function(lines) {
 
   new_lines <- strsplit(new_lines, "\n")[[1]]
 
+  for (line in lines) {
+    if (line != "") {
+      break
+    }
+    new_lines <- c("", new_lines)
+  }
+
+  for (line in rev(lines)) {
+    if (line != "") {
+      break
+    }
+    new_lines <- c(new_lines, "")
+  }
+
   stopifnot(length(lines) == length(new_lines))
 
   different <- which(lines != new_lines)
