@@ -29,6 +29,13 @@
 ---
 
     Code
+      writeLines(q_elide("fun <- Integer()? function(a = 0L ?Integer()) {}"))
+    Output
+      function(a = 0L) {} # !q fun <- Integer()? function(a = 0L ?Integer()) {}
+
+---
+
+    Code
       writeLines(q_elide("Integer()? x <- 0L"))
     Output
       x <- 0L # !q Integer()? x <- 0L
