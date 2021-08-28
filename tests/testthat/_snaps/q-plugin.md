@@ -10,21 +10,21 @@
     Code
       writeLines(q_elide("?function(a = ?Integer()) {}"))
     Output
-      function(a = Integer()) {} # !q ?function(a = ?Integer()) {}
+      function(a             ) {} # !q ?function(a = ?Integer()) {}
 
 ---
 
     Code
       writeLines(q_elide("?function(a = 0L?Integer()) {}"))
     Output
-      function(a = Integer()) {} # !q ?function(a = 0L?Integer()) {}
+      function(a = 0L) {} # !q ?function(a = 0L?Integer()) {}
 
 ---
 
     Code
       writeLines(q_elide("Integer()? function(a = 0L?Integer()) {}"))
     Output
-      function(a = Integer()) {} # !q Integer()? function(a = 0L?Integer()) {}
+      function(a = 0L) {} # !q Integer()? function(a = 0L?Integer()) {}
 
 ---
 
