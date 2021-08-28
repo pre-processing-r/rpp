@@ -103,3 +103,8 @@ elide_one_arg_type <- function(x) {
 rpp_q <- function() {
   inline_plugin(dev = q_uncomment, prod = q_elide)
 }
+
+expect_q_snapshot <- function(code) {
+  code <- strsplit(code, "\n")[[1]]
+  testthat::expect_snapshot(writeLines(q_elide(!!code)))
+}
