@@ -1,4 +1,4 @@
-# snapshots
+# Argument types
 
     Code
       writeLines(q_elide("?function(a = 0L) {}"))
@@ -19,7 +19,7 @@
     Output
       function(a = 0L) {} # !q ?function(a = 0L ?Integer()) {}
 
----
+# Return values
 
     Code
       writeLines(q_elide("Integer()? function(a = 0L ?Integer()) {}"))
@@ -40,7 +40,7 @@
     Output
       function(a = 0L) {} # !q fun <- Integer()? function(a = 0L ?Integer()) {}
 
----
+# Variable types
 
     Code
       writeLines(q_elide("Integer()? x <- 0L"))
