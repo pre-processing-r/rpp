@@ -10,6 +10,7 @@ Applications include:
 - True zero-cost assertions
 - True zero-cost logging
 - Verbatim code inlining and expansion to simplify metaprogramming
+- Dynamic type checking
 - Static type annotations
 
 ## Location of the "source of truth"
@@ -47,3 +48,34 @@ Cons: Entirely new infrastructure
 4. Transformations should be pluggable, it should be easy to contribute plugins that add new transformations not considered yet
 5. Package developers/contributors should get a clear error message if e.g. rpp is not installed
 6. If files are generated, they should receive a "read-only" label that's picked up (at least) by RStudio; maybe it's worth marking the generated files as read-only too?
+
+## Prototype
+
+Three repositories in this organization:
+
+- rpp: Preprocessing framework
+    - New development, this repository
+- [chk](https://github.com/Q-language/chk): Use case "True zero-cost assertions" and working example
+    - Private fork of [poissonconsulting/chk](https://github.com/poissonconsulting/chk)
+- [typed](https://github.com/Q-language/typed): Use case "Dynamic type checking"
+    - Private fork of [moodymudskipper/typed](https://github.com/moodymudskipper/typed)
+
+Features:
+
+- Inline code transformation between "dev" and "prod" mode
+- Plugin concept
+- chk plugin
+- typed plugin
+- Integration with roxygen2
+
+### Inline code transformation between "dev" and "prod" mode
+
+For now, only manual inline transformations are supported.
+Code is expected to reside in the `R/` directory and will be written to that directory.
+Integration with pkgload may come at a later stage.
+
+The "prod" mode is what should be committed to version control and contain optimized code.
+In our example, all checks are elided in "prod" mode, and maintained as comments on the same line so that they can be brought back later.
+
+The "dev" mode is what should be used when working on a package.
+All checks are active.
