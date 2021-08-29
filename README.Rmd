@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+pkgload::load_all()
 ```
 
 # rpp
@@ -97,3 +99,117 @@ In our example, all checks are elided in "prod" mode, and maintained as comments
 
 The "dev" mode is what should be used when working on a package.
 All checks are active.
+
+A development workflow could look like this:
+
+- Clone the package
+- Run tests
+- Switch to "dev" mode: `rpp::rpp_to_dev()`
+- Run tests
+- Implement
+- Run tests
+- Switch to "prod" mode: `rpp::rpp_to_prod()`
+- Commit
+
+```{r cache = TRUE}
+path <- file.path(tempdir(), "chk")
+gert::git_clone("git@github.com:Q-language/chk", path = path)
+oldwd <- setwd(path)
+gert::git_status()
+
+# First-time initialization is noisy
+suppressMessages(rpp::rpp_to_dev())
+gert::git_status()
+
+rpp::rpp_to_prod()
+gert::git_status()
+
+setwd(oldwd)
+```
+
+### Plugin concept
+
+rpp responds to the `Config/rpp/plugins` configuration setting in `DESRIPTION`.
+This setting indicates which plugins to run.
+The setting for chk looks like this:
+
+```
+Config/rpp/plugins: list(typed::rpp_elide_types(), chk::rpp_elide_chk_calls())
+```
+
+A plugin is a function that returns an object obtained from `rpp::inline_plugin()`.
+The plugin constructor expects two functions that perform the transformation to "dev" and "prod" mode.
+Currently the transformation functions expect a character vector that contains the code, and return a character vector with modified code.
+Eventually these functions will get access to roxygen2 tags, so that e.g. different transformations can be applied to exported functions: the developer may wish to keep all checks in place for exported functions, and elide them only from private functions.
+
+### chk plugin
+
+The chk package provides a set of assertions, functions that start with `chk_`.
+
+```{r error = TRUE}
+chk::chk_atomic(1:3)
+chk::chk_atomic(list())
+```
+
+The rpp plugin in this package elides calls to `chk_*()` functions and replaces them with a comment: `chk_atomic(x)` becomes `# !chk chk_atomic(x)` for production.
+
+```{r}
+chk_plugin <- chk::rpp_elide_chk_calls()
+prod_code <- chk_plugin$prod("chk_atomic(x)")
+prod_code
+chk_plugin$dev(prod_code)
+```
+
+The transformation is implemented with a search-replace operation based on regular expressions.
+
+### typed plugin
+
+The typed package implements a framework for dynamic type assertions.
+These assertions are evaluated at run time.
+Assertions are declared using the `?` operator.
+
+```{r error = TRUE}
+library(typed)
+
+foo <- Character()? function(x = ?Character()) {
+  Character()? out <- paste0("foo: x")
+  out
+}
+
+foo(letters[1:3])
+foo(1:3)
+foo
+```
+
+The rpp plugin implemented by {typed} elides the type declarations and pastes the original code as a comment on the same line.
+It is implemented by walking the parse data returned from `utils::parseData()`, using an approach very similar to the {styler} package.
+
+```{r}
+code <- '
+foo <- (Character()? function(x = ?Character()) {
+  Character()? out <- paste0("foo: x")
+  out
+})
+'
+code <- strsplit(code, "\n")[[1]]
+
+typed_plugin <- typed::rpp_elide_types()
+prod <- typed_plugin$prod(code)
+writeLines(prod)
+writeLines(typed_plugin$dev(prod))
+```
+
+### Integration with roxygen2
+
+rpp implements a roclet, a plugin to the roxygen2 package.
+This offers the following advantages:
+
+- Integration with established infrastructure
+- Conversion to "prod" mode as part of `devtools::document()`
+- Access to interpreted roxygen2 tags
+
+To integrate this roclet into RStudio (Ctrl + Shift + D), a manual change had to be performed in `chk.Rproj`:
+
+```
+PackageRoxygenize: rd,collate,namespace,rpp::rpp_prod_roclet
+```

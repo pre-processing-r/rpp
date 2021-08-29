@@ -102,3 +102,181 @@ brought back later.
 
 The “dev” mode is what should be used when working on a package. All
 checks are active.
+
+A development workflow could look like this:
+
+-   Clone the package
+-   Run tests
+-   Switch to “dev” mode: `rpp::rpp_to_dev()`
+-   Run tests
+-   Implement
+-   Run tests
+-   Switch to “prod” mode: `rpp::rpp_to_prod()`
+-   Commit
+
+``` r
+path <- file.path(tempdir(), "chk")
+gert::git_clone("git@github.com:Q-language/chk", path = path)
+oldwd <- setwd(path)
+gert::git_status()
+#> [1] file   status staged
+#> <0 rows> (or 0-length row.names)
+
+# First-time initialization is noisy
+suppressMessages(rpp::rpp_to_dev())
+gert::git_status()
+#>                file   status staged
+#> 1            R/cc.R modified  FALSE
+#> 2    R/check-data.R modified  FALSE
+#> 3     R/check-dim.R modified  FALSE
+#> 4    R/check-dirs.R modified  FALSE
+#> 5   R/check-files.R modified  FALSE
+#> 6     R/check-key.R modified  FALSE
+#> 7   R/check-names.R modified  FALSE
+#> 8  R/check-values.R modified  FALSE
+#> 9       R/chk-dir.R modified  FALSE
+#> 10      R/chk-ext.R modified  FALSE
+#> 11     R/chk-file.R modified  FALSE
+#> 12 R/comment-chks.R modified  FALSE
+#> 13   R/deprecated.R modified  FALSE
+
+rpp::rpp_to_prod()
+gert::git_status()
+#> # A tibble: 0 × 3
+#> # … with 3 variables: file <chr>, status <chr>, staged <lgl>
+
+setwd(oldwd)
+```
+
+### Plugin concept
+
+rpp responds to the `Config/rpp/plugins` configuration setting in
+`DESRIPTION`. This setting indicates which plugins to run. The setting
+for chk looks like this:
+
+    Config/rpp/plugins: list(typed::rpp_elide_types(), chk::rpp_elide_chk_calls())
+
+A plugin is a function that returns an object obtained from
+`rpp::inline_plugin()`. The plugin constructor expects two functions
+that perform the transformation to “dev” and “prod” mode. Currently the
+transformation functions expect a character vector that contains the
+code, and return a character vector with modified code. Eventually these
+functions will get access to roxygen2 tags, so that e.g. different
+transformations can be applied to exported functions: the developer may
+wish to keep all checks in place for exported functions, and elide them
+only from private functions.
+
+### chk plugin
+
+The chk package provides a set of assertions, functions that start with
+`chk_`.
+
+``` r
+chk::chk_atomic(1:3)
+chk::chk_atomic(list())
+#> Error: `list()` must be atomic.
+```
+
+The rpp plugin in this package elides calls to `chk_*()` functions and
+replaces them with a comment: `chk_atomic(x)` becomes
+`# !chk chk_atomic(x)` for production.
+
+``` r
+chk_plugin <- chk::rpp_elide_chk_calls()
+prod_code <- chk_plugin$prod("chk_atomic(x)")
+prod_code
+#> [1] "# !chk chk_atomic(x)"
+chk_plugin$dev(prod_code)
+#> [1] "chk_atomic(x)"
+```
+
+The transformation is implemented with a search-replace operation based
+on regular expressions.
+
+### typed plugin
+
+The typed package implements a framework for dynamic type assertions.
+These assertions are evaluated at run time. Assertions are declared
+using the `?` operator.
+
+``` r
+library(typed)
+#> 
+#> Attaching package: 'typed'
+#> The following object is masked from 'devtools_shims':
+#> 
+#>     ?
+#> The following object is masked from 'package:utils':
+#> 
+#>     ?
+
+foo <- Character()? function(x = ?Character()) {
+  Character()? out <- paste0("foo: x")
+  out
+}
+
+foo(letters[1:3])
+#> [1] "foo: x"
+foo(1:3)
+#> Error: In `foo(1:3)` at `check_arg(x, Character())`:
+#> wrong argument to function, type mismatch
+#> `typeof(value)`: "integer"  
+#> `expected`:      "character"
+foo
+#> # typed function
+#> function (x) 
+#> {
+#>     check_arg(x, Character())
+#>     declare("out", Character(), value = paste0("foo: x"))
+#>     check_output(out, Character())
+#> }
+#> <bytecode: 0x1202a7258>
+#> # Return type: Character()
+#> # Arg types:
+#> # x: Character()
+```
+
+The rpp plugin implemented by {typed} elides the type declarations and
+pastes the original code as a comment on the same line. It is
+implemented by walking the parse data returned from
+`utils::parseData()`, using an approach very similar to the {styler}
+package.
+
+``` r
+code <- '
+foo <- (Character()? function(x = ?Character()) {
+  Character()? out <- paste0("foo: x")
+  out
+})
+'
+code <- strsplit(code, "\n")[[1]]
+
+typed_plugin <- typed::rpp_elide_types()
+prod <- typed_plugin$prod(code)
+writeLines(prod)
+#> 
+#> foo <- (function(x               ) { # !q foo <- (Character()? function(x = ?Character()) {
+#>   out <- paste0("foo: x") # !q   Character()? out <- paste0("foo: x")
+#>   out
+#> })
+writeLines(typed_plugin$dev(prod))
+#> 
+#> foo <- (Character()? function(x = ?Character()) {
+#>   Character()? out <- paste0("foo: x")
+#>   out
+#> })
+```
+
+### Integration with roxygen2
+
+rpp implements a roclet, a plugin to the roxygen2 package. This offers
+the following advantages:
+
+-   Integration with established infrastructure
+-   Conversion to “prod” mode as part of `devtools::document()`
+-   Access to interpreted roxygen2 tags
+
+To integrate this roclet into RStudio (Ctrl + Shift + D), a manual
+change had to be performed in `chk.Rproj`:
+
+    PackageRoxygenize: rd,collate,namespace,rpp::rpp_prod_roclet
