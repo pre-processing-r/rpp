@@ -151,7 +151,7 @@ setwd(oldwd)
 ### Plugin concept
 
 rpp responds to the `Config/rpp/plugins` configuration setting in
-`DESRIPTION`. This setting indicates which plugins to run. The setting
+`DESCRIPTION`. This setting indicates which plugins to run. The setting
 for chk looks like this:
 
     Config/rpp/plugins: list(typed::rpp_elide_types(), chk::rpp_elide_chk_calls())
@@ -230,7 +230,7 @@ foo
 #>     declare("out", Character(), value = paste0("foo: x"))
 #>     check_output(out, Character())
 #> }
-#> <bytecode: 0x1202a7258>
+#> <bytecode: 0x1387c0ae8>
 #> # Return type: Character()
 #> # Arg types:
 #> # x: Character()
@@ -280,3 +280,53 @@ To integrate this roclet into RStudio (Ctrl + Shift + D), a manual
 change had to be performed in `chk.Rproj`:
 
     PackageRoxygenize: rd,collate,namespace,rpp::rpp_prod_roclet
+
+## Project proposal
+
+The prototype demonstrates the practical feasibility of enhancing R to
+support static typing, without requiring much involvement from R core.
+Below is a sketch of possible milestones for a project funded by the R
+Consortium. The project is already split into three parts. It’s unlikely
+that a big project is funded right away, smaller slices increase the
+chance of success.
+
+### Motivation
+
+-   Static typing helps avoid errors early
+-   General-purpose code transformation has many applications, no
+    framework exists in R to date
+
+### First slice: Minimum viable product
+
+1.  Enhance {typed} towards a robust type system
+    -   complex structures
+    -   column specification for data frames
+    -   size ranges for vectors?
+    -   …
+2.  Proposal and infrastructure for type inference
+    -   Proof of concept: {dm}, other packages?
+3.  Other applications for rpp
+    -   Zero-cost logging
+4.  Infrastructure wrapping
+    -   rpp::load\_all(), rpp::test\_local(), rpp::build()
+5.  Stabilization
+    -   dogfood in {dm} and other packages
+
+### Second slice: Useful product
+
+1.  Integration into toolchain — pkgload, R CMD build
+2.  Type annotations for base
+3.  Infrastructure to derive type annotations for custom packages
+4.  Sketch for static type checking
+5.  Faster parser, custom syntax
+6.  Request for user feedback
+
+### Third slice: A new language
+
+1.  Type annotations for recommended packages
+2.  Type annotations for a choice of popular packages
+3.  IDE integration
+4.  GitHub integration
+5.  Sourcegraph integration
+6.  Better static type checking
+7.  Adoption
