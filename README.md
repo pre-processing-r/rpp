@@ -115,6 +115,8 @@ A development workflow could look like this:
 -   Commit
 
 ``` r
+library(rpp)
+
 path <- file.path(tempdir(), "chk")
 gert::git_clone("git@github.com:Q-language/chk", path = path)
 oldwd <- setwd(path)
