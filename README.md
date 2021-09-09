@@ -300,28 +300,34 @@ chance of success.
 
 ### First slice: Minimum viable product
 
-1.  Enhance {typed} towards a robust type system
+1.  Enhance {typed} towards a robust type system (Antoine + John)
     -   complex structures
     -   column specification for data frames
     -   size ranges for vectors?
     -   …
-2.  Proposal and infrastructure for type inference
+2.  Proposal and infrastructure for type inference (Mark)
     -   Proof of concept: {dm}, other packages?
-3.  Other applications for rpp
+3.  Other applications for rpp (Joe, ?)
+    -   Better chk support
     -   Zero-cost logging
-4.  Infrastructure wrapping
-    -   rpp::load\_all(), rpp::test\_local(), rpp::build()
-5.  Stabilization
+4.  Infrastructure wrapping (Kirill)
+    -   `rpp::load_all()`, `rpp::test_local()`, `rpp::build()`
+5.  Plugin semantics (Kirill)
+    -    plugin gets access to roxygen2 tags (reading)
+6.  Stabilization (Team)
     -   dogfood in {dm} and other packages
 
 ### Second slice: Useful product
 
-1.  Integration into toolchain — pkgload, R CMD build
-2.  Type annotations for base
-3.  Infrastructure to derive type annotations for custom packages
-4.  Sketch for static type checking
-5.  Faster parser, custom syntax
-6.  Request for user feedback
+1.  "Parallel" plugin as an alternative to inline plugins
+2.  Integration into toolchain — pkgload, R CMD build
+3.  Type annotations for base
+4.  Infrastructure to learn type annotations from e.g. `@param` and `@return` tags
+5.  Add type information to `@param` and `@return` tags
+6.  Infrastructure to derive type annotations for custom packages
+7.  Sketch for static type checking
+8.  Faster parser, custom syntax
+9.  Request for user feedback
 
 ### Third slice: A new language
 
