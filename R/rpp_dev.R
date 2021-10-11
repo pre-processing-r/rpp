@@ -1,3 +1,14 @@
+#' Development State
+#' 
+#' Switch to codebase to the development state.
+#' 
+#' @details The development state of the codebase
+#' may include type checking and more but cannot
+#' be submitted to CRAN and impacts performances
+#' of runtime code, ensure you switch back to 
+#' the production version with [rpp_to_prod()]
+#' after development work is done.
+#' 
 #' @export
 rpp_to_dev <- function() {
   roxygenize(roclets = "rpp::rpp_dev_roclet", load_code = "source")
