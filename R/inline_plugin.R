@@ -21,6 +21,9 @@
 #' chg_magrittr_to_native(code)
 #' @export
 inline_plugin <- function(dev, prod) {
+  if(!all(is.function(dev), is.function(prod)))
+    stop("`dev` and `prod` expect functions")
+  
   structure(
     list(dev = dev, prod = prod),
     class = c("rpp_inline_plugin", "rpp_plugin")

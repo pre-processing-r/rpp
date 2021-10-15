@@ -1,0 +1,113 @@
+---
+title: "Creating Plugins"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating Plugins}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(rpp)
+```
+
+This documents how to create plugins for {rpp} so you can
+extend its functionalities.
+Here we do so by building a small plugin to allow switching
+between the {magrittr} pipe and R's native pipe.
+It's a good use case, the native pipe does require additional
+dependencies but only works with R >= 4.1.0.
+
+Perhaps we could write a plugin that would easily allow us to
+switch between the magrittr pipe and the native pipe.
+
+## Creating the Plugin
+
+The only rpp function we need is `inline_plugin`.
+This function only accepts two arguments: `dev` and `prod`,
+both expect callback functions.
+These callback functions should accept a single argument:
+a vector of character strings--the source code where
+each character string is a line of code.
+
+First, let's create the function that will replace the native pipe
+to magrittr and vice versa: the callback functions.
+
+```{r}
+chg_magrittr_to_native <- function(lines){
+	gsub("\\%>\\%", "|>", lines)
+}
+
+chg_native_to_magrittr <- function(lines){
+	gsub("\\|>", "%>%", lines)
+}
+```
+
+The argument `lines` expects the vector of lines of source code,
+`gsub` is vectorised and simply replaces the pipes.
+Note that this is very basic and will likely not work every where
+correctly due to its simplicity (it's currently contextless).
+
+We can nonetheless test this function.
+
+```{r}
+# sample code
+magrittr <- 'cars %>% filter(dist > 60) %>% select(speed)'
+
+# convert to native
+(native <- chg_magrittr_to_native(magrittr))
+
+# convert back to magrittr
+chg_native_to_magrittr(native)
+```
+
+## Exporting the plugin
+
+This works, but to be useful we have to integrate it with rpp.
+Within a package create the following two functions to switch
+between pipes, one of these functions does it one way and the other
+the opposite way.
+
+```r
+#' @export 
+rpp_magrittr_to_native <- function() {
+  rpp::inline_plugin(
+		dev = chg_magrittr_to_native, 
+		prod = chg_magrittr_to_native
+	)
+}
+
+#' @export 
+rpp_native_to_magrittr <- function() {
+  rpp::inline_plugin(
+		dev = chg_native_to_magrittr, 
+		prod = chg_native_to_magrittr
+	)
+}
+```
+
+## Using the plugin
+
+To use this within a package add your function of choice
+to the `DESCRIPTION`.
+
+```
+Config/rpp/plugins: list(myPkg::rpp_native_to_magrittr)
+```
+
+Then toggle between pipes with:
+
+```r
+rpp::rpp_to_dev()
+rpp::rpp_to_prod()
+```
+
+These effectively run the respective dev and prod functions
+on the source code in the `R/` directory.

@@ -1,0 +1,25 @@
+template:
+  params:
+    bootswatch: lumen
+
+development:
+  mode: auto
+
+navbar:
+  title: "echarts4r"
+  left:
+    - icon: fa-home
+      href: index.html
+    - icon: fa-balance-scale
+      href: LICENSE.html
+    - text: NEWS
+      href: news/index.html
+    - text: Reference
+      href: "reference/"
+    - text: Guide
+      menu:
+        - text: Create a plugin
+          href: articles/plugins.html
+  right:
+    - icon: fab fa-github fa-lg
+      href: https://github.com/JohnCoene/echarts4r
