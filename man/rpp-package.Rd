@@ -20,5 +20,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Kirill Müller \email{krlmlr+r@mailbox.org} (\href{https://orcid.org/0000-0002-1416-3412}{ORCID})
 
+Other contributors:
+\itemize{
+  \item John Coene \email{jcoenep@gmail.com} [contributor]
+}
+
 }
 \keyword{internal}

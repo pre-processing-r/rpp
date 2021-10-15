@@ -3,13 +3,19 @@ Title: R Preprocessor
 Version: 0.0.0.9000
 Date: 2021-08-26
 Authors@R: 
-    person(given = "Kirill",
+    c(
+        person(given = "Kirill",
            family = "Müller",
            role = c("aut", "cre"),
            email = "krlmlr+r@mailbox.org",
-           comment = c(ORCID = "0000-0002-1416-3412"))
+           comment = c(ORCID = "0000-0002-1416-3412")),
+        person(given = "John",
+           family = "Coene",
+           role = c("ctb"),
+           email = "jcoenep@gmail.com")
+    )
 Description: A configurable framework for applying code transformations to R package projects.
-License: MIT
+License: MIT + file LICENSE
 URL: https://github.com/Q-language/rpp, https://Q-language.github.io/rpp
 BugReports: https://github.com/Q-language/rpp/issues
 Encoding: UTF-8

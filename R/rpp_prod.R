@@ -9,11 +9,13 @@
 #' but ensure you switch back to production when
 #' pushing the code to online repositories or CRAN.
 #' 
+#' @name rpp_to_prod
 #' @export
 rpp_to_prod <- function() {
   roxygenize(roclets = "rpp::rpp_prod_roclet", load_code = "source")
 }
 
+#' @rdname rpp_to_prod
 #' @export
 rpp_prod_roclet <- function() {
   roclet("rpp_prod")

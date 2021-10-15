@@ -9,11 +9,13 @@
 #' the production version with [rpp_to_prod()]
 #' after development work is done.
 #' 
+#' @name rpp_to_dev
 #' @export
 rpp_to_dev <- function() {
   roxygenize(roclets = "rpp::rpp_dev_roclet", load_code = "source")
 }
 
+#' @rdname rpp_to_dev
 #' @export
 rpp_dev_roclet <- function() {
   roclet("rpp_dev")
