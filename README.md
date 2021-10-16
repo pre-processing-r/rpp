@@ -96,6 +96,6 @@ The fork of the {[chk](https://github.com/Q-language/chk)} package in this organ
 
 ## Further reading
 
--   To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp")`
--   The creation of a new plugin and the integration with roxygen2 is described in `vignette("plugins")`
--   An outlook on future development is presented in `vignette("roadmap")`
+-   To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp", package = "rpp")`
+-   The creation of a new plugin and the integration with roxygen2 is described in [`vignette("plugins", package = "rpp")`](https://rpp.q-lang.org/articles/plugins.html)
+-   An outlook on future development is presented in `vignette("roadmap", package = "rpp")`

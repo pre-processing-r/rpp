@@ -113,6 +113,6 @@ Clone the repository, start an R session, and run `rpp::rpp_to_dev()` and `rpp::
 
 ## Further reading
 
-- To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp")`
-- The creation of a new plugin and the integration with roxygen2 is described in `vignette("plugins")`
-- An outlook on future development is presented in `vignette("roadmap")`
+- To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp", package = "rpp")`
+- The creation of a new plugin and the integration with roxygen2 is described in `vignette("plugins", package = "rpp")`
+- An outlook on future development is presented in `vignette("roadmap", package = "rpp")`
