@@ -96,6 +96,30 @@ Running [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) 
 
 The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp. Clone the repository, start an R session, and run [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) to see rpp in action.
 
+## Configure your own project for use with rpp
+
+This example show how to configure your project with rpp and dynamic type checking via {typed}. Note that this requires {typed} to be installed from [this organization’s fork](https://github.com/Q-language/typed). Adapt as necessary for use with other plugins.
+
+rpp currently works only on projects with a `DESCRIPTION` file, and operates only on files in the `R/` directory. Add the following line to `DESCRIPTION`:
+
+<pre class='chroma'>
+<span class='nv'>Config</span><span class='o'>/</span><span class='nv'>rpp</span><span class='o'>/</span><span class='nv'>plugins</span><span class='o'>:</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='nf'>typed</span><span class='nf'>::</span><span class='nf'>rpp_elide_types</span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span></pre>
+
+With this configuration, [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) will run the plugin implemented by {typed}.
+
+In the case of {typed}, two more tweaks are necessary:
+
+1.  The package must be listed in the `Suggests` section of the `DESCRIPTION` file.
+2.  It should be loaded, at least in development mode, to enable the overload of the `?` operator.
+
+For the latter, you can add the following snippet to your project’s [`.onLoad()`](https://rdrr.io/r/base/ns-hooks.html) function:
+
+<pre class='chroma'>
+<span class='nv'>.onLoad</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>libname</span>, <span class='nv'>pkgname</span><span class='o'>)</span> <span class='o'>{</span>
+  <span class='c'># Called for the side effect of loading but not attaching the typed package:</span>
+  <span class='nf'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='o'>(</span><span class='s'>"typed"</span>, quietly <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
+<span class='o'>}</span></pre>
+
 ## Further reading
 
 -   To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp", package = "rpp")`

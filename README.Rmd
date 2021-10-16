@@ -118,6 +118,36 @@ The production version is not particularly pretty, but does the job.
 The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp.
 Clone the repository, start an R session, and run `rpp::rpp_to_dev()` and `rpp::rpp_to_prod()` to see rpp in action.
 
+
+## Configure your own project for use with rpp
+
+This example show how to configure your project with rpp and dynamic type checking via {typed}.
+Note that this requires {typed} to be installed from [this organization's fork](https://github.com/Q-language/typed).
+Adapt as necessary for use with other plugins.
+
+rpp currently works only on projects with a `DESCRIPTION` file, and operates only on files in the `R/` directory.
+Add the following line to `DESCRIPTION`:
+
+```dcf
+Config/rpp/plugins: list(typed::rpp_elide_types())
+```
+
+With this configuration, `rpp::rpp_to_dev()` and `rpp::rpp_to_prod()` will run the plugin implemented by {typed}.
+
+In the case of {typed}, two more tweaks are necessary:
+
+1. The package must be listed in the `Suggests` section of the `DESCRIPTION` file.
+2. It should be loaded, at least in development mode, to enable the overload of the `?` operator.
+
+For the latter, you can add the following snippet to your project's `.onLoad()` function:
+
+```r
+.onLoad <- function(libname, pkgname) {
+  # Called for the side effect of loading but not attaching the typed package:
+  requireNamespace("typed", quietly = TRUE)
+}
+```
+
 ## Further reading
 
 - To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp", package = "rpp")`
