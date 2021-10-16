@@ -1,14 +1,17 @@
 #' Development State
-#' 
-#' Switch to codebase to the development state.
-#' 
+#'
+#' Switch a codebase to the development state.
+#'
 #' @details The development state of the codebase
 #' may include type checking and more but cannot
-#' be submitted to CRAN and impacts performances
-#' of runtime code, ensure you switch back to 
+#' be submitted to CRAN and impacts performance
+#' of runtime code.
+#' Also, currently this state is not meant to be committed to version control;
+#' this may change in further versions.
+#' Ensure you switch back to
 #' the production version with [rpp_to_prod()]
 #' after development work is done.
-#' 
+#'
 #' @name rpp_to_dev
 #' @export
 rpp_to_dev <- function() {
