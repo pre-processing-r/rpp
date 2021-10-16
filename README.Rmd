@@ -39,7 +39,7 @@ With preprocessing, this can be done with no cost at runtime.
 
 This package operates on the notion of different source code "modes":
 
-- **Development** (or dev): what the developer of the package edits
+- **Development** (or dev): the code the developer of the package works on
 - **Production** (or prod): the code that is run by typical users
 
 Expensive checks can be enabled in development mode, while production code is kept lean and fast.

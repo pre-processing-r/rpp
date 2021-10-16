@@ -18,7 +18,7 @@ R is a weakly-typed interpreted language: variables can hold objects of any time
 
 This package operates on the notion of different source code “modes”:
 
--   **Development** (or dev): what the developer of the package edits
+-   **Development** (or dev): the code the developer of the package works on
 -   **Production** (or prod): the code that is run by typical users
 
 Expensive checks can be enabled in development mode, while production code is kept lean and fast. In production mode, all checks are completely removed (elided) from the source code. Only production code ends up in version control, this ensures compatibility with existing tooling. Code can be quickly and losslessly converted between development and production modes with [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html).
