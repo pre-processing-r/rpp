@@ -1,8 +1,8 @@
 ---
-title: "Creating Plugins"
+title: "Creating plugins"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating Plugins}
+  %\VignetteIndexEntry{Creating plugins}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -27,7 +27,7 @@ between the {magrittr} pipe and R's native pipe.
 It's a good use case, the native pipe does require additional
 dependencies but only works with R >= 4.1.0.
 
-## Creating the Plugin
+## Creating the plugin
 
 The only rpp function we need is `inline_plugin()`.
 This function only accepts two arguments: `dev` and `prod`,
