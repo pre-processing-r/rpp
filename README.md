@@ -7,7 +7,6 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![rcc](https://github.com/Q-language/rpp/workflows/rcc/badge.svg)](https://github.com/Q-language/rpp/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rpp)](https://CRAN.R-project.org/package=rpp)
 <!-- badges: end -->
