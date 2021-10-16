@@ -1,8 +1,8 @@
 ---
-title: "Creating Plugins"
+title: "Creating plugins"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating Plugins}
+  %\VignetteIndexEntry{Creating plugins}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,12 +20,14 @@ library(rpp)
 
 This documents how to create plugins for {rpp} so you can
 extend its functionality.
-Here we do so by building a small plugin to allow switching
+If you're new to {rpp}, head over to `vignette("rpp")` for an introduction.
+
+We build a small plugin to allow switching
 between the {magrittr} pipe and R's native pipe.
 It's a good use case, the native pipe does require additional
 dependencies but only works with R >= 4.1.0.
 
-## Creating the Plugin
+## Creating the plugin
 
 The only rpp function we need is `inline_plugin()`.
 This function only accepts two arguments: `dev` and `prod`,
@@ -109,3 +111,21 @@ rpp::rpp_to_prod()
 
 These effectively run the respective dev and prod functions
 on the source code in the `R/` directory.
+
+
+## roxygen2 integration
+
+The rpp package implements two roxygen2 roclets:
+
+- `rpp::rpp_to_dev()` switches to dev mode
+- `rpp::rpp_to_prod()` switches to prod mode
+
+This serves two purposes:
+
+1. The `rpp_to_prod()` roclet can be configured to be run with `devtools::document()`.
+2. In the future, plugins will receive additional context information from roxygen2. This can be used to e.g. trigger additional behaviors or to adapt the documentation of function argument and return types.
+
+Currently, plugins receive the contents of entire source files.
+Later, plugins will be called with the contents of individual roxygen2 chunks.
+We strive to keep the interfaces backward-compatible so that plugins developed today will remain operational for some time in the future.
+See `vignette("roadmap")` for an outlook on future development.
