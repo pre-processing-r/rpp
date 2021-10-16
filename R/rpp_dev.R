@@ -18,7 +18,12 @@ rpp_to_dev <- function() {
   roxygenize(roclets = "rpp::rpp_dev_roclet", load_code = "source")
 }
 
-#' @rdname rpp_to_dev
+#' Roclets
+#'
+#' These functions implement [roxygen2::roclet()]s for integration
+#' with the roxygen2 package.
+#'
+#' @rdname roclets
 #' @export
 rpp_dev_roclet <- function() {
   roclet("rpp_dev")

@@ -2,12 +2,9 @@
 % Please edit documentation in R/rpp_prod.R
 \name{rpp_to_prod}
 \alias{rpp_to_prod}
-\alias{rpp_prod_roclet}
 \title{Production State}
 \usage{
 rpp_to_prod()
-
-rpp_prod_roclet()
 }
 \description{
 Switch a codebase to its production state.

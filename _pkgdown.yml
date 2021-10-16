@@ -6,6 +6,9 @@ reference:
 - title: Plugin definition
   contents:
   - inline_plugin
+- title: roxygen2 integration
+  contents:
+  - roclets
 
 development:
   mode: auto

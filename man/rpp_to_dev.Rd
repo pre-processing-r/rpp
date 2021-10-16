@@ -2,12 +2,9 @@
 % Please edit documentation in R/rpp_dev.R
 \name{rpp_to_dev}
 \alias{rpp_to_dev}
-\alias{rpp_dev_roclet}
 \title{Development State}
 \usage{
 rpp_to_dev()
-
-rpp_dev_roclet()
 }
 \description{
 Switch a codebase to the development state.
