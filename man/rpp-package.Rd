@@ -11,8 +11,8 @@ A configurable framework for applying code transformations to R package projects
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://rpp.q-lang.org/}
   \item \url{https://github.com/Q-language/rpp}
-  \item \url{https://Q-language.github.io/rpp}
   \item Report bugs at \url{https://github.com/Q-language/rpp/issues}
 }
 
