@@ -3,3 +3,4 @@
 ^README\.Rmd$
 ^LICENSE\.md$
 _cache$
+^\.github$
