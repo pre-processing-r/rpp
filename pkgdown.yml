@@ -1,7 +1,10 @@
 pandoc: 2.7.3
 pkgdown: 1.9000.9000.9000
-pkgdown_sha: 2e96869d3fd642a5af3540c83987dc2308463ab6
+pkgdown_sha: 30bf506f55531054994b7e90ea69bfa653597111
 articles:
   plugins: plugins.html
-last_built: 2021-10-16T09:20Z
+last_built: 2021-10-16T14:56Z
+urls:
+  reference: https://rpp.q-lang.org/reference
+  article: https://rpp.q-lang.org/articles
 

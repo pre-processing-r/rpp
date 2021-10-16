@@ -50,7 +50,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/plugins.html">Creating Plugins</a>
+      <a href="articles/plugins.html">Creating plugins</a>
     </li>
   </ul>
 </li>
@@ -78,334 +78,101 @@
 <div class="page-header"><h1>rpp<a class="anchor" aria-label="anchor" href="#rpp"></a>
 </h1></div>
 <!-- badges: start -->
+
 <!-- badges: end -->
-<p>An approach to preprocessing R code.</p>
-<div id="goals" class="section level2">
-<h2>Goals<a class="anchor" aria-label="anchor" href="#goals"></a>
+<p>The goal of rpp is to provide a framework for preprocessing R code. Ultimately, this package aims at supporting static type checking for R, among other applications. Currently, two plugins exist: dynamic type checking, and zero-cost assertions.</p>
+<div id="overview" class="section level2">
+<h2>Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The purpose of this project is to provide infrastructure that helps generating the files in the <code>R/</code> directory in a package, either from other sources, or inline. Applications include:</p>
-<ul>
-<li>True zero-cost assertions</li>
-<li>True zero-cost logging</li>
-<li>Verbatim code inlining and expansion to simplify metaprogramming</li>
-<li>Dynamic type checking</li>
-<li>Static type annotations</li>
-</ul>
-</div>
-<div id="location-of-the-source-of-truth" class="section level2">
-<h2>Location of the “source of truth”<a class="anchor" aria-label="anchor" href="#location-of-the-source-of-truth"></a>
-</h2>
-<div id="inline" class="section level3">
-<h3>Inline<a class="anchor" aria-label="anchor" href="#inline"></a>
+<div id="development-vs-production" class="section level3">
+<h3>Development vs. production<a class="anchor" aria-label="anchor" href="#development-vs-production"></a>
 </h3>
-<p>Works for assertions and logging.</p>
-<p>Prerequisite: we don’t add or remove extra lines.</p>
-<p>Pros: doesn’t need any extra files</p>
-<p>Cons: transformation must be bidirectional (or at least work in the reverse way)</p>
-</div>
-<div id="parallel-directory" class="section level3">
-<h3>Parallel directory<a class="anchor" aria-label="anchor" href="#parallel-directory"></a>
-</h3>
-<p>Required for inlining/expansion and static type annotations.</p>
-<p>Pros: Works for all cases</p>
-<p>Cons: Entirely new infrastructure</p>
-</div>
-</div>
-<div id="constraints" class="section level2">
-<h2>Constraints<a class="anchor" aria-label="anchor" href="#constraints"></a>
-</h2>
-<ol style="list-style-type: decimal">
-<li>At any point in time, the code stored in version control should reflect the state most useful during <em>production</em>.
-<ul>
-<li>Rationale: <code>devtools::install_github()</code> should “just work” and give you a package that you can already use.</li>
-</ul>
-</li>
-<li>Ideally, the transformations occur during the following steps:
+<p>This package operates on the notion of different source code “modes”:</p>
 <ul>
 <li>
-<code>devtools::document()</code>: from parallel directory to <code>R/</code>, and also prepare the inline code for production</li>
+<strong>Development</strong> (or dev): what the developer of the package edits</li>
 <li>
-<code><a href="https://rdrr.io/pkg/pkgload/man/load_all.html" class="external-link">pkgload::load_all()</a></code>: this seems the most challenging part, do we need a hook into <code>load_all()</code> ?</li>
+<strong>Production</strong> (or prod): the code that is run by typical users</li>
 </ul>
-No transformation occurs during installation or execution time of the target package!</li>
-<li>A no-op transformation should be fast. When transforming the same code twice, the second transformation should be instant. This is important for rapid development cycles.</li>
-<li>Transformations should be pluggable, it should be easy to contribute plugins that add new transformations not considered yet</li>
-<li>Package developers/contributors should get a clear error message if e.g. rpp is not installed</li>
-<li>If files are generated, they should receive a “read-only” label that’s picked up (at least) by RStudio; maybe it’s worth marking the generated files as read-only too?</li>
-</ol>
+<p>Expensive checks can be enabled in development mode, while production code is kept lean and fast. In production mode, all checks are completely removed (elided) from the source code. Only production code ends up in version control, this ensures compatibility with existing tooling. Code can be quickly and losslessly converted between development and production modes with <a href="https://rpp.q-lang.org/reference/rpp_to_dev.html"><code>rpp::rpp_to_dev()</code></a> and <a href="https://rpp.q-lang.org/reference/rpp_to_prod.html"><code>rpp::rpp_to_prod()</code></a>.</p>
 </div>
-<div id="prototype" class="section level2">
-<h2>Prototype<a class="anchor" aria-label="anchor" href="#prototype"></a>
+<div id="plugins" class="section level3">
+<h3>Plugins<a class="anchor" aria-label="anchor" href="#plugins"></a>
+</h3>
+<p>The rpp package does not implement any code transformations. Rather, it provides the infrastructure for plugins which are responsible for converting development code to production code and back. Currently, two plugins exist (in forks of existing packages in this GitHub organization):</p>
+<ul>
+<li>{<a href="https://github.com/Q-language/typed" class="external-link">typed</a>} provides dynamic type checking via the <code>typed::rpp_elide_types()</code> plugin</li>
+<li>{<a href="https://github.com/Q-language/chk" class="external-link">chk</a>} provides zero-cost assertions via the <a href="https://rdrr.io/pkg/chk/man/rpp_elide_chk_calls.html" class="external-link"><code>chk::rpp_elide_chk_calls()</code></a> plugin</li>
+</ul>
+<p>Plugins are configured in the <code>DESCRIPTION</code> file.</p>
+</div>
+</div>
+<div id="installation" class="section level2">
+<h2>Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Three repositories in this organization:</p>
-<ul>
-<li>rpp: Preprocessing framework
-<ul>
-<li>New development, this repository</li>
-</ul>
-</li>
-<li>
-<a href="https://github.com/Q-language/chk" class="external-link">chk</a>: Use case “True zero-cost assertions” and working example
-<ul>
-<li>Private fork of <a href="https://github.com/poissonconsulting/chk" class="external-link">poissonconsulting/chk</a>
-</li>
-</ul>
-</li>
-<li>
-<a href="https://github.com/Q-language/typed" class="external-link">typed</a>: Use case “Dynamic type checking”
-<ul>
-<li>Private fork of <a href="https://github.com/moodymudskipper/typed" class="external-link">moodymudskipper/typed</a>
-</li>
-</ul>
-</li>
-</ul>
-<p>Features:</p>
-<ul>
-<li>Inline code transformation between “dev” and “prod” mode</li>
-<li>Plugin concept</li>
-<li>chk plugin</li>
-<li>typed plugin</li>
-<li>Integration with roxygen2</li>
-</ul>
-<div id="inline-code-transformation-between-dev-and-prod-mode" class="section level3">
-<h3>Inline code transformation between “dev” and “prod” mode<a class="anchor" aria-label="anchor" href="#inline-code-transformation-between-dev-and-prod-mode"></a>
-</h3>
-<p>For now, only manual inline transformations are supported. Code is expected to reside in the <code>R/</code> directory and will be written to that directory. Integration with pkgload may come at a later stage.</p>
-<p>The “prod” mode is what should be committed to version control and contain optimized code. In our example, all checks are elided in “prod” mode, and maintained as comments on the same line so that they can be brought back later.</p>
-<p>The “dev” mode is what should be used when working on a package. All checks are active.</p>
-<p>A development workflow could look like this:</p>
-<ul>
-<li>Clone the package</li>
-<li>Run tests</li>
-<li>Switch to “dev” mode: <code><a href="reference/rpp_to_dev.html">rpp::rpp_to_dev()</a></code>
-</li>
-<li>Run tests</li>
-<li>Implement</li>
-<li>Run tests</li>
-<li>Switch to “prod” mode: <code><a href="reference/rpp_to_prod.html">rpp::rpp_to_prod()</a></code>
-</li>
-<li>Commit</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Q-language/rpp" class="external-link">rpp</a></span><span class="op">)</span>
-
-<span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"chk"</span><span class="op">)</span>
-<span class="fu">gert</span><span class="fu">::</span><span class="fu">git_clone</span><span class="op">(</span><span class="st">"git@github.com:Q-language/chk"</span>, path <span class="op">=</span> <span class="va">path</span><span class="op">)</span>
-<span class="va">oldwd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span>
-<span class="fu">gert</span><span class="fu">::</span><span class="fu">git_status</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; [1] file   status staged</span>
-<span class="co">#&gt; &lt;0 rows&gt; (or 0-length row.names)</span>
-
-<span class="co"># First-time initialization is noisy</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="fu">rpp</span><span class="fu">::</span><span class="fu"><a href="reference/rpp_to_dev.html">rpp_to_dev</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">gert</span><span class="fu">::</span><span class="fu">git_status</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;                file   status staged</span>
-<span class="co">#&gt; 1            R/cc.R modified  FALSE</span>
-<span class="co">#&gt; 2    R/check-data.R modified  FALSE</span>
-<span class="co">#&gt; 3     R/check-dim.R modified  FALSE</span>
-<span class="co">#&gt; 4    R/check-dirs.R modified  FALSE</span>
-<span class="co">#&gt; 5   R/check-files.R modified  FALSE</span>
-<span class="co">#&gt; 6     R/check-key.R modified  FALSE</span>
-<span class="co">#&gt; 7   R/check-names.R modified  FALSE</span>
-<span class="co">#&gt; 8  R/check-values.R modified  FALSE</span>
-<span class="co">#&gt; 9       R/chk-dir.R modified  FALSE</span>
-<span class="co">#&gt; 10      R/chk-ext.R modified  FALSE</span>
-<span class="co">#&gt; 11     R/chk-file.R modified  FALSE</span>
-<span class="co">#&gt; 12 R/comment-chks.R modified  FALSE</span>
-<span class="co">#&gt; 13   R/deprecated.R modified  FALSE</span>
-
-<span class="fu">rpp</span><span class="fu">::</span><span class="fu"><a href="reference/rpp_to_prod.html">rpp_to_prod</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu">gert</span><span class="fu">::</span><span class="fu">git_status</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 0 × 3</span>
-<span class="co">#&gt; # … with 3 variables: file &lt;chr&gt;, status &lt;chr&gt;, staged &lt;lgl&gt;</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="va">oldwd</span><span class="op">)</span></code></pre></div>
+<p>Install the development version of rpp and the associated packages from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<pre class="chroma">
+<span class="c"># install.packages("devtools")</span>
+<span class="nf">devtools</span><span class="nf">::</span><span class="nf"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="o">(</span><span class="s">"Q-language/rpp"</span><span class="o">)</span>
+<span class="nf">devtools</span><span class="nf">::</span><span class="nf"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="o">(</span><span class="s">"Q-language/typed"</span><span class="o">)</span>
+<span class="nf">devtools</span><span class="nf">::</span><span class="nf"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="o">(</span><span class="s">"Q-language/chk"</span><span class="o">)</span></pre>
+<p>Once on <a href="https://CRAN.R-project.org" class="external-link">CRAN</a>, you can also install the released version of rpp with:</p>
+<pre class="chroma">
+<span class="nf"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="o">(</span><span class="s">"rpp"</span><span class="o">)</span></pre>
 </div>
-<div id="plugin-concept" class="section level3">
-<h3>Plugin concept<a class="anchor" aria-label="anchor" href="#plugin-concept"></a>
-</h3>
-<p>rpp responds to the <code>Config/rpp/plugins</code> configuration setting in <code>DESCRIPTION</code>. This setting indicates which plugins to run. The setting for chk looks like this:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>Config<span class="op">/</span>rpp<span class="op">/</span>plugins<span class="op">:</span><span class="st"> </span><span class="kw">list</span>(typed<span class="op">::</span><span class="kw">rpp_elide_types</span>(), chk<span class="op">::</span><span class="kw">rpp_elide_chk_calls</span>())</span></code></pre></div>
-<p>A plugin is a function that returns an object obtained from <code><a href="reference/inline_plugin.html">rpp::inline_plugin()</a></code>. The plugin constructor expects two functions that perform the transformation to “dev” and “prod” mode. Currently the transformation functions expect a character vector that contains the code, and return a character vector with modified code. Eventually these functions will get access to roxygen2 tags, so that e.g. different transformations can be applied to exported functions: the developer may wish to keep all checks in place for exported functions, and elide them only from private functions.</p>
-</div>
-<div id="chk-plugin" class="section level3">
-<h3>chk plugin<a class="anchor" aria-label="anchor" href="#chk-plugin"></a>
-</h3>
-<p>The chk package provides a set of assertions, functions that start with <code>chk_</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">chk</span><span class="fu">::</span><span class="fu">chk_atomic</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
-<span class="fu">chk</span><span class="fu">::</span><span class="fu">chk_atomic</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Error: `list()` must be atomic.</span></code></pre></div>
-<p>The rpp plugin in this package elides calls to <code>chk_*()</code> functions and replaces them with a comment: <code>chk_atomic(x)</code> becomes <code># !chk chk_atomic(x)</code> for production.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">chk_plugin</span> <span class="op">&lt;-</span> <span class="fu">chk</span><span class="fu">::</span><span class="fu">rpp_elide_chk_calls</span><span class="op">(</span><span class="op">)</span>
-<span class="va">prod_code</span> <span class="op">&lt;-</span> <span class="va">chk_plugin</span><span class="op">$</span><span class="fu">prod</span><span class="op">(</span><span class="st">"chk_atomic(x)"</span><span class="op">)</span>
-<span class="va">prod_code</span>
-<span class="co">#&gt; [1] "# !chk chk_atomic(x)"</span>
-<span class="va">chk_plugin</span><span class="op">$</span><span class="fu">dev</span><span class="op">(</span><span class="va">prod_code</span><span class="op">)</span>
-<span class="co">#&gt; [1] "chk_atomic(x)"</span></code></pre></div>
-<p>The transformation is implemented with a search-replace operation based on regular expressions.</p>
-</div>
-<div id="typed-plugin" class="section level3">
-<h3>typed plugin<a class="anchor" aria-label="anchor" href="#typed-plugin"></a>
-</h3>
-<p>The typed package implements a framework for dynamic type assertions. These assertions are evaluated at run time. Assertions are declared using the <code>?</code> operator.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">typed</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'typed'</span>
-<span class="co">#&gt; The following object is masked from 'devtools_shims':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     ?</span>
-<span class="co">#&gt; The following object is masked from 'package:utils':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     ?</span>
-
-<span class="va">foo</span> <span class="op">&lt;-</span> <span class="fu">Character</span><span class="op">(</span><span class="op">)</span><span class="op">?</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="op">?</span><span class="fu">Character</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu">Character</span><span class="op">(</span><span class="op">)</span><span class="op">?</span> <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"foo: x"</span><span class="op">)</span>
-  <span class="va">out</span>
-<span class="op">}</span>
-
-<span class="fu">foo</span><span class="op">(</span><span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
-<span class="co">#&gt; [1] "foo: x"</span>
-<span class="fu">foo</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; Error: In `foo(1:3)` at `check_arg(x, Character())`:</span>
-<span class="co">#&gt; wrong argument to function, type mismatch</span>
-<span class="co">#&gt; `typeof(value)`: "integer"  </span>
-<span class="co">#&gt; `expected`:      "character"</span>
-<span class="va">foo</span>
-<span class="co">#&gt; # typed function</span>
-<span class="co">#&gt; function (x) </span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     check_arg(x, Character())</span>
-<span class="co">#&gt;     declare("out", Character(), value = paste0("foo: x"))</span>
-<span class="co">#&gt;     check_output(out, Character())</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; &lt;bytecode: 0x1387c0ae8&gt;</span>
-<span class="co">#&gt; # Return type: Character()</span>
-<span class="co">#&gt; # Arg types:</span>
-<span class="co">#&gt; # x: Character()</span></code></pre></div>
-<p>The rpp plugin implemented by {typed} elides the type declarations and pastes the original code as a comment on the same line. It is implemented by walking the parse data returned from <code>utils::parseData()</code>, using an approach very similar to the {styler} package.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">code</span> <span class="op">&lt;-</span> <span class="st">'
-foo &lt;- (Character()? function(x = ?Character()) {
-  Character()? out &lt;- paste0("foo: x")
-  out
-})
-'</span>
-<span class="va">code</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">code</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-
-<span class="va">typed_plugin</span> <span class="op">&lt;-</span> <span class="fu">typed</span><span class="fu">::</span><span class="fu">rpp_elide_types</span><span class="op">(</span><span class="op">)</span>
-<span class="va">prod</span> <span class="op">&lt;-</span> <span class="va">typed_plugin</span><span class="op">$</span><span class="fu">prod</span><span class="op">(</span><span class="va">code</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">prod</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; foo &lt;- (function(x               ) { # !q foo &lt;- (Character()? function(x = ?Character()) {</span>
-<span class="co">#&gt;   out &lt;- paste0("foo: x") # !q   Character()? out &lt;- paste0("foo: x")</span>
-<span class="co">#&gt;   out</span>
-<span class="co">#&gt; })</span>
-<span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="va">typed_plugin</span><span class="op">$</span><span class="fu">dev</span><span class="op">(</span><span class="va">prod</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; foo &lt;- (Character()? function(x = ?Character()) {</span>
-<span class="co">#&gt;   Character()? out &lt;- paste0("foo: x")</span>
-<span class="co">#&gt;   out</span>
-<span class="co">#&gt; })</span></code></pre></div>
-</div>
-<div id="integration-with-roxygen2" class="section level3">
-<h3>Integration with roxygen2<a class="anchor" aria-label="anchor" href="#integration-with-roxygen2"></a>
-</h3>
-<p>rpp implements a roclet, a plugin to the roxygen2 package. This offers the following advantages:</p>
-<ul>
-<li>Integration with established infrastructure</li>
-<li>Conversion to “prod” mode as part of <code>devtools::document()</code>
-</li>
-<li>Access to interpreted roxygen2 tags</li>
-</ul>
-<p>To integrate this roclet into RStudio (Ctrl + Shift + D), a manual change had to be performed in <code>chk.Rproj</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>PackageRoxygenize<span class="op">:</span><span class="st"> </span>rd,collate,namespace,rpp<span class="op">::</span>rpp_prod_roclet</span></code></pre></div>
-</div>
-</div>
-<div id="project-proposal" class="section level2">
-<h2>Project proposal<a class="anchor" aria-label="anchor" href="#project-proposal"></a>
+<div id="example" class="section level2">
+<h2>Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>The prototype demonstrates the practical feasibility of enhancing R to support static typing, without requiring much involvement from R core. Below is a sketch of possible milestones for a project funded by the R Consortium. The project is already split into three parts. It’s unlikely that a big project is funded right away, smaller slices increase the chance of success.</p>
-<div id="motivation" class="section level3">
-<h3>Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
-</h3>
-<ul>
-<li>Static typing helps avoid errors early</li>
-<li>General-purpose code transformation has many applications, no framework exists in R to date</li>
-</ul>
+<pre class="chroma">
+<span class="kr"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="o">(</span><span class="nv"><a href="https://github.com/moodymudskipper/typed" class="external-link">typed</a></span><span class="o">)</span>
+<span class="c">#&gt; </span>
+<span class="c">#&gt; Attaching package: 'typed'</span>
+<span class="c">#&gt; The following object is masked from 'devtools_shims':</span>
+<span class="c">#&gt; </span>
+<span class="c">#&gt;     ?</span>
+<span class="c">#&gt; The following object is masked from 'package:utils':</span>
+<span class="c">#&gt; </span>
+<span class="c">#&gt;     ?</span></pre>
+<p>The following function makes use of dynamic type assertions provided by the {typed} package:</p>
+<pre class="chroma">
+<span class="nv">foo</span> <span class="o">&lt;-</span> <span class="nf"><a href="https://rdrr.io/pkg/typed/man/assertion_factories.html" class="external-link">Character</a></span><span class="o">(</span><span class="o">)</span><span class="o">?</span> <span class="kr">function</span><span class="o">(</span><span class="nv">x</span> <span class="o">=</span> <span class="o">?</span><span class="nf"><a href="https://rdrr.io/pkg/typed/man/assertion_factories.html" class="external-link">Character</a></span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nf"><a href="https://rdrr.io/pkg/typed/man/assertion_factories.html" class="external-link">Character</a></span><span class="o">(</span><span class="o">)</span><span class="o">?</span> <span class="nv">out</span> <span class="o">&lt;-</span> <span class="nf"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="o">(</span><span class="s">"foo:"</span>, <span class="nv">x</span><span class="o">)</span>
+  <span class="nv">out</span>
+<span class="o">}</span></pre>
+<p>This is still valid R code, because {typed} overloads the <code>?</code> operator. The function can only be called with a character vector, other types give an error:</p>
+<pre class="chroma">
+<span class="nf">foo</span><span class="o">(</span><span class="s">"bar"</span><span class="o">)</span>
+<span class="c">#&gt; [1] "foo: bar"</span>
+<span class="nf">foo</span><span class="o">(</span><span class="m">1</span><span class="o">)</span>
+<span class="c">#&gt; Error: In `foo(1)` at `check_arg(x, Character())`:</span>
+<span class="c">#&gt; wrong argument to function, type mismatch</span>
+<span class="c">#&gt; `typeof(value)`: <span style="color: #00BB00;">"double"</span>   </span>
+<span class="c">#&gt; `expected`:      <span style="color: #00BB00;">"character"</span></span>
+<span class="nf">foo</span><span class="o">(</span><span class="nv">mean</span><span class="o">)</span>
+<span class="c">#&gt; Error: In `foo(mean)` at `check_arg(x, Character())`:</span>
+<span class="c">#&gt; wrong argument to function, type mismatch</span>
+<span class="c">#&gt; `typeof(value)`: <span style="color: #00BB00;">"closure"</span>  </span>
+<span class="c">#&gt; `expected`:      <span style="color: #00BB00;">"character"</span></span></pre>
+<p>These checks are useful, but slow down the code. If this function lives in a package that is configured with the <code>typed::rpp_elide_types()</code> plugin, running <a href="https://rpp.q-lang.org/reference/rpp_to_prod.html"><code>rpp::rpp_to_prod()</code></a> results in the following code:</p>
+<pre class="chroma">
+<span class="nv">foo</span> <span class="o">&lt;-</span>              <span class="kr">function</span><span class="o">(</span><span class="nv">x</span>               <span class="o">)</span> <span class="o">{</span> <span class="c"># !q foo &lt;- Character()? function(x = ?Character()) {</span>
+  <span class="nv">out</span> <span class="o">&lt;-</span> <span class="nf"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="o">(</span><span class="s">"foo:"</span>, <span class="nv">x</span><span class="o">)</span>                        <span class="c"># !q   Character()? out &lt;- paste("foo:", x)</span>
+  <span class="nv">out</span>
+<span class="o">}</span></pre>
+<p>Running <a href="https://rpp.q-lang.org/reference/rpp_to_dev.html"><code>rpp::rpp_to_dev()</code></a> brings back the original code with the checks. The production version is not particularly pretty, but does the job.</p>
+<p>The fork of the {<a href="https://github.com/Q-language/chk" class="external-link">chk</a>} package in this organization is configured for use with rpp. Clone the repository, start an R session, and run <a href="https://rpp.q-lang.org/reference/rpp_to_dev.html"><code>rpp::rpp_to_dev()</code></a> and <a href="https://rpp.q-lang.org/reference/rpp_to_prod.html"><code>rpp::rpp_to_prod()</code></a> to see rpp in action.</p>
 </div>
-<div id="first-slice-minimum-viable-product" class="section level3">
-<h3>First slice: Minimum viable product<a class="anchor" aria-label="anchor" href="#first-slice-minimum-viable-product"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>Enhance {typed} towards a robust type system (Antoine + John)
+<div id="further-reading" class="section level2">
+<h2>Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
+</h2>
 <ul>
-<li>complex structures</li>
-<li>column specification for data frames</li>
-<li>size ranges for vectors?</li>
-<li>…</li>
-</ul>
+<li>To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see <code>vignette("rpp", package = "rpp")</code>
 </li>
-<li>Proposal and infrastructure for type inference (Mark)
-<ul>
-<li>Proof of concept: {dm}, other packages?</li>
-</ul>
+<li>The creation of a new plugin and the integration with roxygen2 is described in <a href="https://rpp.q-lang.org/articles/plugins.html"><code>vignette("plugins", package = "rpp")</code></a>
 </li>
-<li>Other applications for rpp (Joe, ?)
-<ul>
-<li>Better chk support</li>
-<li>Zero-cost logging</li>
-</ul>
-</li>
-<li>Infrastructure wrapping (Kirill)
-<ul>
-<li>
-<code>rpp::load_all()</code>, <code>rpp::test_local()</code>, <code><a href="https://rdrr.io/r/utils/PkgUtils.html" class="external-link">rpp::build()</a></code>
+<li>An outlook on future development is presented in <code>vignette("roadmap", package = "rpp")</code>
 </li>
 </ul>
-</li>
-<li>Plugin semantics (Kirill)
-<ul>
-<li>plugin gets access to roxygen2 tags (reading)</li>
-</ul>
-</li>
-<li>Stabilization (Team)
-<ul>
-<li>dogfood in {dm} and other packages</li>
-</ul>
-</li>
-</ol>
-</div>
-<div id="second-slice-useful-product" class="section level3">
-<h3>Second slice: Useful product<a class="anchor" aria-label="anchor" href="#second-slice-useful-product"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>“Parallel” plugin as an alternative to inline plugins</li>
-<li>Integration into toolchain — pkgload, R CMD build</li>
-<li>Type annotations for base</li>
-<li>Infrastructure to learn type annotations from e.g. <code>@param</code> and <code>@return</code> tags</li>
-<li>Add type information to <code>@param</code> and <code>@return</code> tags</li>
-<li>Infrastructure to derive type annotations for custom packages</li>
-<li>Sketch for static type checking</li>
-<li>Faster parser, custom syntax</li>
-<li>Request for user feedback</li>
-</ol>
-</div>
-<div id="third-slice-a-new-language" class="section level3">
-<h3>Third slice: A new language<a class="anchor" aria-label="anchor" href="#third-slice-a-new-language"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>Type annotations for recommended packages</li>
-<li>Type annotations for a choice of popular packages</li>
-<li>IDE integration</li>
-<li>GitHub integration</li>
-<li>Sourcegraph integration</li>
-<li>Better static type checking</li>
-<li>Adoption</li>
-</ol>
-</div>
 </div>
 </div>
   </div>
@@ -446,7 +213,12 @@ foo &lt;- (Character()? function(x = ?Character()) {
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
 
   </div>
 </div>
