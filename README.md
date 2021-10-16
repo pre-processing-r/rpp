@@ -11,22 +11,24 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/rpp)](https://CRAN.R-project.org/package=rpp)
 <!-- badges: end -->
 
-The goal of rpp is to …
+The goal of rpp is to provide a framework for preprocessing R code.
+Ultimately, this package aims at supporting static type checking for R,
+among other applications.
 
 ## Installation
 
-You can install the released version of rpp from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("rpp")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+Install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("Q-language/rpp")
+```
+
+Once on [CRAN](https://CRAN.R-project.org), you can also install the
+released version of rpp with:
+
+``` r
+install.packages("rpp")
 ```
 
 ## Example
