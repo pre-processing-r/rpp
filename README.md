@@ -122,6 +122,10 @@ For the latter, you can add the following snippet to your project’s [`.onLoad(
 
 ## Further reading
 
--   To set up rpp for an existing or new project, and to learn about the existing plugins in more detail, see `vignette("rpp", package = "rpp")`
--   The creation of a new plugin and the integration with roxygen2 is described in [`vignette("plugins", package = "rpp")`](https://rpp.q-lang.org/articles/plugins.html)
--   An outlook on future development is presented in `vignette("roadmap", package = "rpp")`
+The creation of a new plugin and the integration with roxygen2 is described in [`vignette("plugins", package = "rpp")`](https://rpp.q-lang.org/articles/plugins.html).
+
+------------------------------------------------------------------------
+
+## Code of Conduct
+
+Please note that the rpp project is released with a [Contributor Code of Conduct](https://rpp.q-lang.org/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
