@@ -10,13 +10,13 @@ rpp_to_prod()
 rpp_prod_roclet()
 }
 \description{
-Switch to codebase to its production state.
+Switch a codebase to its production state.
 }
 \details{
 The production state of the code does
-not include type checking or other checks for
+not include type checking or other checks, for
 performance reasons. You may switch to the
-development state of the code with \code{\link[=rpp_to_dev]{rpp_to_dev()}}
+development state of the code with \code{\link[=rpp_to_dev]{rpp_to_dev()}},
 but ensure you switch back to production when
-pushing the code to online repositories or CRAN.
+pushing the code to online repositories or to CRAN.
 }
