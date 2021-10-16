@@ -109,7 +109,7 @@ Running `rpp::rpp_to_dev()` brings back the original code with the checks.
 The production version is not particularly pretty, but does the job.
 
 The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp.
-Clone the repository, start an R session, and run `rpp:rpp_to_dev()` and `rpp::rpp_to_prod()` to see rpp in action.
+Clone the repository, start an R session, and run `rpp::rpp_to_dev()` and `rpp::rpp_to_prod()` to see rpp in action.
 
 ## Further reading
 

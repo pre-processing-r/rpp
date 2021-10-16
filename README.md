@@ -92,7 +92,7 @@ These checks are useful, but slow down the code. If this function lives in a pac
 
 Running [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) brings back the original code with the checks. The production version is not particularly pretty, but does the job.
 
-The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp. Clone the repository, start an R session, and run `rpp:rpp_to_dev()` and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) to see rpp in action.
+The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp. Clone the repository, start an R session, and run [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) to see rpp in action.
 
 ## Further reading
 
