@@ -4,6 +4,7 @@ reference:
   - rpp_to_dev
   - rpp_to_prod
 - title: Plugin definition
+  contents:
   - inline_plugin
 
 development:
