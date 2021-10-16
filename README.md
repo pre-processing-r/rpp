@@ -19,7 +19,7 @@ This package operates on the notion of different source code “modes”:
 -   **Development** (or dev): what the developer of the package edits
 -   **Production** (or prod): the code that is run by typical users
 
-Expensive checks can be enabled in development mode, while production code is kept lean and fast. In production mode, all checks are completely removed (elided) from the source code. Only production code ends up in version control, this ensures compatibility with existing tooling. Code can be quickly and losslessly converted between development and production modes with [`rpp::rpp_to_dev()`](https://Q-language.github.io/rpp/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://Q-language.github.io/rpp/reference/rpp_to_prod.html).
+Expensive checks can be enabled in development mode, while production code is kept lean and fast. In production mode, all checks are completely removed (elided) from the source code. Only production code ends up in version control, this ensures compatibility with existing tooling. Code can be quickly and losslessly converted between development and production modes with [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html).
 
 ### Plugins
 
@@ -82,7 +82,7 @@ This is still valid R code, because {typed} overloads the `?` operator. The func
 <span class='c'>#&gt; `typeof(value)`: <span style='color: #00BB00;'>"closure"</span>  </span>
 <span class='c'>#&gt; `expected`:      <span style='color: #00BB00;'>"character"</span></span></pre>
 
-These checks are useful, but slow down the code. If this function lives in a package that is configured with the `typed::rpp_elide_types()` plugin, running [`rpp::rpp_to_prod()`](https://Q-language.github.io/rpp/reference/rpp_to_prod.html) results in the following code:
+These checks are useful, but slow down the code. If this function lives in a package that is configured with the `typed::rpp_elide_types()` plugin, running [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) results in the following code:
 
 <pre class='chroma'>
 <span class='nv'>foo</span> <span class='o'>&lt;-</span>              <span class='kr'>function</span><span class='o'>(</span><span class='nv'>x</span>               <span class='o'>)</span> <span class='o'>{</span> <span class='c'># !q foo &lt;- Character()? function(x = ?Character()) {</span>
@@ -90,9 +90,9 @@ These checks are useful, but slow down the code. If this function lives in a pac
   <span class='nv'>out</span>
 <span class='o'>}</span></pre>
 
-Running [`rpp::rpp_to_dev()`](https://Q-language.github.io/rpp/reference/rpp_to_dev.html) brings back the original code with the checks. The production version is not particularly pretty, but does the job.
+Running [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) brings back the original code with the checks. The production version is not particularly pretty, but does the job.
 
-The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp. Clone the repository, start an R session, and run `rpp:rpp_to_dev()` and [`rpp::rpp_to_prod()`](https://Q-language.github.io/rpp/reference/rpp_to_prod.html) to see rpp in action.
+The fork of the {[chk](https://github.com/Q-language/chk)} package in this organization is configured for use with rpp. Clone the repository, start an R session, and run `rpp:rpp_to_dev()` and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) to see rpp in action.
 
 ## Further reading
 
