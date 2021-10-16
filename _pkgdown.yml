@@ -8,7 +8,7 @@ reference:
   - inline_plugin
 - title: roxygen2 integration
   contents:
-  - roclets
+  - contains("roclet")
 
 development:
   mode: auto
