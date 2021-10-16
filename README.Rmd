@@ -125,6 +125,8 @@ This example show how to configure your project with rpp and dynamic type checki
 Note that this requires {typed} to be installed from [this organization's fork](https://github.com/Q-language/typed).
 Adapt as necessary for use with other plugins.
 
+### Basic configuration
+
 rpp currently works only on projects with a `DESCRIPTION` file, and operates only on files in the `R/` directory.
 Add the following line to `DESCRIPTION`:
 
@@ -133,6 +135,8 @@ Config/rpp/plugins: list(typed::rpp_elide_types())
 ```
 
 With this configuration, `rpp::rpp_to_dev()` and `rpp::rpp_to_prod()` will run the plugin implemented by {typed}.
+
+### Configuring for {typed}
 
 In the case of {typed}, two more tweaks are necessary:
 
@@ -147,6 +151,24 @@ For the latter, you can add the following snippet to your project's `.onLoad()` 
   requireNamespace("typed", quietly = TRUE)
 }
 ```
+
+### {roxygen2} integration 
+
+A project can be automated to change to production mode when `devtools::document()` is run.
+Add the `rpp::rpp_prod_roclet()` to the list of roclets:
+
+```dcf
+Roxygen: list(markdown = TRUE, roclets = c("collate", "namespace", "rd", "rpp::rpp_prod_roclet"))
+```
+
+RStudio users can also edit the `.Rproj` file to convert to prod when Ctrl+Shift+D is pressed:
+
+```txt
+PackageRoxygenize: rd,collate,namespace,rpp::rpp_prod_roclet
+```
+
+With this configuration, running `devtools::document()` includes the effect of calling `rpp::rpp_to_prod()`.
+
 
 ## Further reading
 

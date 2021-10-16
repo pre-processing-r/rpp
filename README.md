@@ -100,12 +100,16 @@ The fork of the {[chk](https://github.com/Q-language/chk)} package in this organ
 
 This example show how to configure your project with rpp and dynamic type checking via {typed}. Note that this requires {typed} to be installed from [this organization’s fork](https://github.com/Q-language/typed). Adapt as necessary for use with other plugins.
 
+### Basic configuration
+
 rpp currently works only on projects with a `DESCRIPTION` file, and operates only on files in the `R/` directory. Add the following line to `DESCRIPTION`:
 
 <pre class='chroma'>
 <span class='nv'>Config</span><span class='o'>/</span><span class='nv'>rpp</span><span class='o'>/</span><span class='nv'>plugins</span><span class='o'>:</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span><span class='nf'>typed</span><span class='nf'>::</span><span class='nf'>rpp_elide_types</span><span class='o'>(</span><span class='o'>)</span><span class='o'>)</span></pre>
 
 With this configuration, [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html) will run the plugin implemented by {typed}.
+
+### Configuring for {typed}
 
 In the case of {typed}, two more tweaks are necessary:
 
@@ -119,6 +123,21 @@ For the latter, you can add the following snippet to your project’s [`.onLoad(
   <span class='c'># Called for the side effect of loading but not attaching the typed package:</span>
   <span class='nf'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='o'>(</span><span class='s'>"typed"</span>, quietly <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
 <span class='o'>}</span></pre>
+
+### {roxygen2} integration
+
+A project can be automated to change to production mode when [`devtools::document()`](https://devtools.r-lib.org//reference/document.html) is run. Add the [`rpp::rpp_prod_roclet()`](https://rpp.q-lang.org/reference/roclets.html) to the list of roclets:
+
+<pre class='chroma'>
+<span class='nv'>Roxygen</span><span class='o'>:</span> <span class='nf'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='o'>(</span>markdown <span class='o'>=</span> <span class='kc'>TRUE</span>, roclets <span class='o'>=</span> <span class='nf'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='o'>(</span><span class='s'>"collate"</span>, <span class='s'>"namespace"</span>, <span class='s'>"rd"</span>, <span class='s'>"rpp::rpp_prod_roclet"</span><span class='o'>)</span><span class='o'>)</span></pre>
+
+RStudio users can also edit the `.Rproj` file to convert to prod when Ctrl+Shift+D is pressed:
+
+``` txt
+PackageRoxygenize: rd,collate,namespace,rpp::rpp_prod_roclet
+```
+
+With this configuration, running [`devtools::document()`](https://devtools.r-lib.org//reference/document.html) includes the effect of calling [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html).
 
 ## Further reading
 
