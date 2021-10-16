@@ -168,10 +168,17 @@
 <h2>Configure your own project for use with rpp<a class="anchor" aria-label="anchor" href="#configure-your-own-project-for-use-with-rpp"></a>
 </h2>
 <p>This example show how to configure your project with rpp and dynamic type checking via {typed}. Note that this requires {typed} to be installed from <a href="https://github.com/Q-language/typed" class="external-link">this organization’s fork</a>. Adapt as necessary for use with other plugins.</p>
+<div id="basic-configuration" class="section level3">
+<h3>Basic configuration<a class="anchor" aria-label="anchor" href="#basic-configuration"></a>
+</h3>
 <p>rpp currently works only on projects with a <code>DESCRIPTION</code> file, and operates only on files in the <code>R/</code> directory. Add the following line to <code>DESCRIPTION</code>:</p>
 <pre class="chroma">
 <span class="nv">Config</span><span class="o">/</span><span class="nv">rpp</span><span class="o">/</span><span class="nv">plugins</span><span class="o">:</span> <span class="nf"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="o">(</span><span class="nf">typed</span><span class="nf">::</span><span class="nf">rpp_elide_types</span><span class="o">(</span><span class="o">)</span><span class="o">)</span></pre>
 <p>With this configuration, <a href="https://rpp.q-lang.org/reference/rpp_to_dev.html"><code>rpp::rpp_to_dev()</code></a> and <a href="https://rpp.q-lang.org/reference/rpp_to_prod.html"><code>rpp::rpp_to_prod()</code></a> will run the plugin implemented by {typed}.</p>
+</div>
+<div id="configuring-for-typed" class="section level3">
+<h3>Configuring for {typed}<a class="anchor" aria-label="anchor" href="#configuring-for-typed"></a>
+</h3>
 <p>In the case of {typed}, two more tweaks are necessary:</p>
 <ol style="list-style-type: decimal">
 <li>The package must be listed in the <code>Suggests</code> section of the <code>DESCRIPTION</code> file.</li>
@@ -183,6 +190,17 @@
   <span class="c"># Called for the side effect of loading but not attaching the typed package:</span>
   <span class="nf"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="o">(</span><span class="s">"typed"</span>, quietly <span class="o">=</span> <span class="kc">TRUE</span><span class="o">)</span>
 <span class="o">}</span></pre>
+</div>
+<div id="roxygen2-integration" class="section level3">
+<h3>{roxygen2} integration<a class="anchor" aria-label="anchor" href="#roxygen2-integration"></a>
+</h3>
+<p>A project can be automated to change to production mode when <a href="https://devtools.r-lib.org//reference/document.html" class="external-link"><code>devtools::document()</code></a> is run. Add the <a href="https://rpp.q-lang.org/reference/roclets.html"><code>rpp::rpp_prod_roclet()</code></a> to the list of roclets:</p>
+<pre class="chroma">
+<span class="nv">Roxygen</span><span class="o">:</span> <span class="nf"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="o">(</span>markdown <span class="o">=</span> <span class="kc">TRUE</span>, roclets <span class="o">=</span> <span class="nf"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="o">(</span><span class="s">"collate"</span>, <span class="s">"namespace"</span>, <span class="s">"rd"</span>, <span class="s">"rpp::rpp_prod_roclet"</span><span class="o">)</span><span class="o">)</span></pre>
+<p>RStudio users can also edit the <code>.Rproj</code> file to convert to prod when Ctrl+Shift+D is pressed:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1"></a>PackageRoxygenize: rd,collate,namespace,rpp::rpp_prod_roclet</span></code></pre></div>
+<p>With this configuration, running <a href="https://devtools.r-lib.org//reference/document.html" class="external-link"><code>devtools::document()</code></a> includes the effect of calling <a href="https://rpp.q-lang.org/reference/rpp_to_prod.html"><code>rpp::rpp_to_prod()</code></a>.</p>
+</div>
 </div>
 <div id="further-reading" class="section level2">
 <h2>Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
