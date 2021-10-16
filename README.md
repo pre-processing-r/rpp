@@ -8,11 +8,13 @@
 
 <!-- badges: end -->
 
-The goal of rpp is to provide a framework for preprocessing R code. Ultimately, this package aims at supporting static type checking for R, among other applications. Currently, two plugins exist: dynamic type checking, and zero-cost assertions.
+The goal of rpp is to provide a framework for preprocessing R code. Ultimately, this package aims at supporting static type checking for R, among other applications. At this time, dynamic type checking and zero-cost assertions are supported with the help of two other packages, {typed} and {chk}.
 
-## Overview
+## Motivation
 
-### Development vs. production
+R is a weakly-typed interpreted language: variables can hold objects of any time, there is no explicit compilation stage, and no checks are carried out during run time. This is great for interactive ad-hoc analysis, but can make complex projects more difficult to maintain and debug. In contrast, in strongly-typed languages, the type of each variable is declared beforehand. Adding a static type checking layer to R would make it easier to improve stability in complex projects. With preprocessing, this can be done with no cost at runtime.
+
+## Development vs. production
 
 This package operates on the notion of different source code “modes”:
 
@@ -21,7 +23,7 @@ This package operates on the notion of different source code “modes”:
 
 Expensive checks can be enabled in development mode, while production code is kept lean and fast. In production mode, all checks are completely removed (elided) from the source code. Only production code ends up in version control, this ensures compatibility with existing tooling. Code can be quickly and losslessly converted between development and production modes with [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/rpp_to_dev.html) and [`rpp::rpp_to_prod()`](https://rpp.q-lang.org/reference/rpp_to_prod.html).
 
-### Plugins
+## Plugins
 
 The rpp package does not implement any code transformations. Rather, it provides the infrastructure for plugins which are responsible for converting development code to production code and back. Currently, two plugins exist (in forks of existing packages in this GitHub organization):
 

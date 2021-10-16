@@ -23,12 +23,19 @@ pkgload::load_all()
 
 The goal of rpp is to provide a framework for preprocessing R code.
 Ultimately, this package aims at supporting static type checking for R, among other applications.
-Currently, two plugins exist: dynamic type checking, and zero-cost assertions.
+At this time, dynamic type checking and zero-cost assertions are supported with the help of two other packages, {typed} and {chk}.
 
 
-## Overview
+## Motivation
 
-### Development vs. production
+R is a weakly-typed interpreted language: variables can hold objects of any time, there is no explicit compilation stage, and no checks are carried out during run time.
+This is great for interactive ad-hoc analysis, but can make complex projects more difficult to maintain and debug.
+In contrast, in strongly-typed languages, the type of each variable is declared beforehand.
+Adding a static type checking layer to R would make it easier to improve stability in complex projects.
+With preprocessing, this can be done with no cost at runtime.
+
+
+## Development vs. production
 
 This package operates on the notion of different source code "modes":
 
@@ -41,7 +48,7 @@ Only production code ends up in version control, this ensures compatibility with
 Code can be quickly and losslessly converted between development and production modes with `rpp::rpp_to_dev()` and `rpp::rpp_to_prod()`.
 
 
-### Plugins
+## Plugins
 
 The rpp package does not implement any code transformations.
 Rather, it provides the infrastructure for plugins which are responsible for converting development code to production code and back.
