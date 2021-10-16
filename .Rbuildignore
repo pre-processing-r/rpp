@@ -4,3 +4,4 @@
 ^LICENSE\.md$
 _cache$
 ^\.github$
+^_pkgdown\.yml$
