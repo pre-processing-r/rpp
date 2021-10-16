@@ -20,7 +20,9 @@ library(rpp)
 
 This documents how to create plugins for {rpp} so you can
 extend its functionality.
-Here we do so by building a small plugin to allow switching
+If you're new to {rpp}, head over to `vignette("rpp")` for an introduction.
+
+We build a small plugin to allow switching
 between the {magrittr} pipe and R's native pipe.
 It's a good use case, the native pipe does require additional
 dependencies but only works with R >= 4.1.0.
@@ -126,3 +128,4 @@ This serves two purposes:
 Currently, plugins receive the contents of entire source files.
 Later, plugins will be called with the contents of individual roxygen2 chunks.
 We strive to keep the interfaces backward-compatible so that plugins developed today will remain operational for some time in the future.
+See `vignette("roadmap")` for an outlook on future development.
