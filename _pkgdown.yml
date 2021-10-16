@@ -1,0 +1,14 @@
+reference:
+- title: Switching between modes
+  contents:
+  - rpp_to_dev
+  - rpp_to_prod
+- title: Plugin definition
+  - inline_plugin
+
+development:
+  mode: auto
+
+authors:
+  Kirill Müller:
+    href: https://krlmlr.info
