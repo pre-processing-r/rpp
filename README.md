@@ -113,16 +113,10 @@ With this configuration, [`rpp::rpp_to_dev()`](https://rpp.q-lang.org/reference/
 
 In the case of {typed}, two more tweaks are necessary:
 
-1.  The package must be listed in the `Suggests` section of the `DESCRIPTION` file.
-2.  It should be loaded, at least in development mode, to enable the overload of the `?` operator.
+1.  The package must be listed in the `Imports` section of the `DESCRIPTION` file.
+2.  It should be imported to enable the overload of the `?` operator and to access the type declarations.
 
-For the latter, you can add the following snippet to your project’s [`.onLoad()`](https://rdrr.io/r/base/ns-hooks.html) function:
-
-<pre class='chroma'>
-<span class='nv'>.onLoad</span> <span class='o'>&lt;-</span> <span class='kr'>function</span><span class='o'>(</span><span class='nv'>libname</span>, <span class='nv'>pkgname</span><span class='o'>)</span> <span class='o'>{</span>
-  <span class='c'># Called for the side effect of loading but not attaching the typed package:</span>
-  <span class='nf'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='o'>(</span><span class='s'>"typed"</span>, quietly <span class='o'>=</span> <span class='kc'>TRUE</span><span class='o'>)</span>
-<span class='o'>}</span></pre>
+For the latter, add `import(typed)` to `NAMESPACE`, or `#' @import typed` to an `.R` source file if you are using roxygen2.
 
 ### {roxygen2} integration
 
