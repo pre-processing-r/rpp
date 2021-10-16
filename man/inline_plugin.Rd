@@ -8,21 +8,22 @@ inline_plugin(dev, prod)
 }
 \arguments{
 \item{dev, prod}{Development and production
-functions to run when in either state. This
+functions to run when in either state. These
 callback function should accept a single argument
-a vector of character strings: the source code where
-each character string is a line of code.}
+\code{lines}, a vector of character strings: the source code where
+each character string is a line of code.
+They also should accept an ellipsis \code{...} for future extensibility.}
 }
 \description{
 Create an inline plugin.
 }
 \examples{
-chg_magrittr_to_native <- function(lines){
+chg_magrittr_to_native <- function(lines) {
   gsub("\\\\\%>\\\\\%", "|>", lines)
 }
 
-code <- 'function(x){
-  x \%>\% 
+code <- 'function(x) {
+  x \%>\%
     sum()
 }'
 
