@@ -3,7 +3,7 @@ pkgdown: 1.9000.9000.9000
 pkgdown_sha: e21d2ff187124501919249e3d21fe9cf44d41391
 articles:
   plugins: plugins.html
-last_built: 2021-10-16T19:38Z
+last_built: 2021-10-16T20:09Z
 urls:
   reference: https://rpp.q-lang.org/reference
   article: https://rpp.q-lang.org/articles

@@ -181,15 +181,10 @@
 </h3>
 <p>In the case of {typed}, two more tweaks are necessary:</p>
 <ol style="list-style-type: decimal">
-<li>The package must be listed in the <code>Suggests</code> section of the <code>DESCRIPTION</code> file.</li>
-<li>It should be loaded, at least in development mode, to enable the overload of the <code>?</code> operator.</li>
+<li>The package must be listed in the <code>Imports</code> section of the <code>DESCRIPTION</code> file.</li>
+<li>It should be imported to enable the overload of the <code>?</code> operator and to access the type declarations.</li>
 </ol>
-<p>For the latter, you can add the following snippet to your project’s <a href="https://rdrr.io/r/base/ns-hooks.html" class="external-link"><code>.onLoad()</code></a> function:</p>
-<pre class="chroma">
-<span class="nv">.onLoad</span> <span class="o">&lt;-</span> <span class="kr">function</span><span class="o">(</span><span class="nv">libname</span>, <span class="nv">pkgname</span><span class="o">)</span> <span class="o">{</span>
-  <span class="c"># Called for the side effect of loading but not attaching the typed package:</span>
-  <span class="nf"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="o">(</span><span class="s">"typed"</span>, quietly <span class="o">=</span> <span class="kc">TRUE</span><span class="o">)</span>
-<span class="o">}</span></pre>
+<p>For the latter, add <code>import(typed)</code> to <code>NAMESPACE</code>, or <code>#' @import typed</code> to an <code>.R</code> source file if you are using roxygen2.</p>
 </div>
 <div id="roxygen2-integration" class="section level3">
 <h3>{roxygen2} integration<a class="anchor" aria-label="anchor" href="#roxygen2-integration"></a>
