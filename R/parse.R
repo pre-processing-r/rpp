@@ -22,10 +22,7 @@ parse_text <- function(text) {
   stopifnot(length(parsed) == length(srcrefs))
   stopifnot(length(parsed) == length(code))
 
-  nested <- rlang::list2(parsed = parsed, srcrefs = srcrefs, code = code)
-
-  # unnest(nested, everything())
-  nested
+  tibble(parsed, srcrefs, code)
 }
 
 #' Rich parse data for all source files in a package
