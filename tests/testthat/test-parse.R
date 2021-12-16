@@ -12,6 +12,10 @@ test_that("parse_text() snapshots", {
   })
 
   expect_snapshot({
+    as.list(parse_text("a <- 1\n# separate comment"))
+  })
+
+  expect_snapshot({
     as.list(parse_text("a <- 1\na <- 2"))
   })
 
