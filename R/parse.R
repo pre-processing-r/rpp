@@ -8,9 +8,9 @@ parse_text <- function(text) {
   expr <- parse(text = text, keep.source = TRUE, srcfile = srcfilecopy("<text>", lines, isFile = TRUE))
   srcref <- attr(expr, "srcref")
 
-  parse_data <- get_parse_data(expr)
+  code <- get_parse_data(expr)
 
-  nested <- rlang::list2(parsed = as.list(expr), srcrefs = srcref, !!!parse_data)
+  nested <- rlang::list2(parsed = as.list(expr), srcrefs = srcref, code = code)
 
   # stopifnot(lengths(nested$parsed) == lengths(nested$srcrefs))
   # stopifnot(lengths(nested$parsed) == lengths(nested$parse_data))
@@ -31,7 +31,7 @@ parse_package <- function(path = ".") {
 
   parse_data <- map(parsed, get_parse_data)
 
-  nested <- tibble(file, parsed = map(parsed, as.list), srcrefs, parse_data)
+  nested <- tibble(file, parsed = map(parsed, as.list), srcrefs, code = parse_data)
 
   stopifnot(lengths(nested$parsed) == lengths(nested$srcrefs))
   stopifnot(lengths(nested$parsed) == lengths(nested$parse_data))
@@ -65,5 +65,5 @@ get_parse_data <- function(exprs) {
   has_semicolon <- map_lgl(code, ~ .x$token[[1]] == "';'")
   code <- code[!length_one | !has_semicolon]
 
-  tibble::lst(code)
+  code
 }
