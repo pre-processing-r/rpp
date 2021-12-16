@@ -60,6 +60,11 @@ get_parse_data <- function(exprs) {
   split <- cumsum(pd_code$parent == 0)
   code <- unname(split(pd_code, split))
 
+  # Special case: semicolon
+  length_one <- map_int(code, nrow) == 1
+  has_semicolon <- map_lgl(code, ~ .x$token[[1]] == "';'")
+  code <- code[!length_one | !has_semicolon]
+
   # stopifnot(length(pre_comments) == length(code))
 
   tibble::lst(pre_comments, code)

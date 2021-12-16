@@ -217,12 +217,6 @@
       6     1     6     1     6     5      7 expr        FALSE    1     
       
       $code[[2]]
-      # A tibble: 1 x 9
-        line1  col1 line2  col2    id parent token terminal text 
-        <int> <int> <int> <int> <int>  <int> <chr> <lgl>    <chr>
-      1     1     7     1     7     6      0 ';'   TRUE     ;    
-      
-      $code[[3]]
       # A tibble: 6 x 9
         line1  col1 line2  col2    id parent token       terminal text  
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr> 
