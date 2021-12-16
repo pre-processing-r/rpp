@@ -40,32 +40,30 @@ parse_package <- function(path = ".") {
   nested
 }
 
+get_tree_root <- function(id, parent) {
+  tree <- data.tree::FromDataFrameNetwork(data.frame(id, parent))
+  list <- data.tree::ToListSimple(tree)
+  trees <- map(list[-1], data.tree::FromListSimple)
+  root_maps <- map(trees, data.tree::ToDataFrameNetwork)
+
+  root_map <- imap_dfr(root_maps, ~ tibble(id = c(as.integer(.y), .x$to), root = as.integer(.y)))
+
+  root_map$root[match(id, root_map$id)]
+}
+
 get_parse_data <- function(exprs) {
   pd <-
     getParseData(exprs, includeText = TRUE) %>%
     arrange(line1, col1, desc(line2), desc(col2), parent) %>%
     as_tibble()
 
-  is_pre_comment <- pd$parent < 0
-  is_pre_comment_rle <- rle(is_pre_comment | (pd$token != "COMMENT" & pd$parent == 0))
-
-  pre_comment_end <- cumsum(is_pre_comment_rle$lengths)
-  pre_comment_start <- lag(pre_comment_end, default = 0L) + 1L
-  pre_comment_idx <- map2(pre_comment_start[is_pre_comment_rle$values], pre_comment_end[is_pre_comment_rle$values] - 1L, rlang::seq2)
-  pre_comments <- map(pre_comment_idx, ~ pd[.x, ])
-
-  pd_code <- pd[!is_pre_comment, ]
-
-  stopifnot(pd_code$parent[[1]] == 0)
-  split <- cumsum(pd_code$parent == 0)
-  code <- unname(split(pd_code, split))
+  root <- get_tree_root(pd$id, abs(pd$parent))
+  code <- unname(split(pd, root))
 
   # Special case: semicolon
   length_one <- map_int(code, nrow) == 1
   has_semicolon <- map_lgl(code, ~ .x$token[[1]] == "';'")
   code <- code[!length_one | !has_semicolon]
 
-  # stopifnot(length(pre_comments) == length(code))
-
-  tibble::lst(pre_comments, code)
+  tibble::lst(code)
 }
