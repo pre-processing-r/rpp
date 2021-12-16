@@ -51,7 +51,7 @@ get_parse_data <- function(exprs) {
 
   pre_comment_end <- cumsum(is_pre_comment_rle$lengths)
   pre_comment_start <- lag(pre_comment_end, default = 0L) + 1L
-  pre_comment_idx <- map2(pre_comment_start[is_pre_comment_rle$values], pre_comment_end[is_pre_comment_rle$values], rlang::seq2)
+  pre_comment_idx <- map2(pre_comment_start[is_pre_comment_rle$values], pre_comment_end[is_pre_comment_rle$values] - 1L, rlang::seq2)
   pre_comments <- map(pre_comment_idx, ~ pd[.x, ])
 
   pd_code <- pd[!is_pre_comment, ]
