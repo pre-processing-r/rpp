@@ -6,14 +6,23 @@
 parse_text <- function(text) {
   lines <- unlist(strsplit(text, "\n"))
   expr <- parse(text = text, keep.source = TRUE, srcfile = srcfilecopy("<text>", lines, isFile = TRUE))
-  srcref <- attr(expr, "srcref")
+  srcrefs <- attr(expr, "srcref")
 
+  parsed <- as.list(expr)
   code <- get_parse_data(expr)
 
-  nested <- rlang::list2(parsed = as.list(expr), srcrefs = srcref, code = code)
+  n_code <- length(code)
+  if (length(parsed) < n_code) {
+    # Bind the last two parse data frames
+    stopifnot(all(code[[n_code]]$token == "COMMENT"))
+    n_code_2 <- n_code - 1:0
+    code <- c(code[-n_code_2], list(bind_rows(code[n_code_2])))
+  }
 
-  # stopifnot(lengths(nested$parsed) == lengths(nested$srcrefs))
-  # stopifnot(lengths(nested$parsed) == lengths(nested$parse_data))
+  stopifnot(length(parsed) == length(srcrefs))
+  stopifnot(length(parsed) == length(code))
+
+  nested <- rlang::list2(parsed = parsed, srcrefs = srcrefs, code = code)
 
   # unnest(nested, everything())
   nested
