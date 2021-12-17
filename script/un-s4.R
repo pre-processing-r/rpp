@@ -46,7 +46,6 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
     "#' @usage NULL\n",
     new_method_name, " <- ", parse_data$text[set_method_children_idx][[7]],
     "\n",
-    "\n",
     name_header, "\n",
     if (has_export) "#' @export\n",
     deparse(code, 500)
