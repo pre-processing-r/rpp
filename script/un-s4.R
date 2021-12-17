@@ -1,6 +1,6 @@
 pkgload::load_all()
 
-parsed <- parse_package("~/git/R/r-dbi/DBI")
+parsed_full <- parse_package("~/git/R/r-dbi/DBI")
 
 method_idx <- map_lgl(parsed$code, ~ {
   list <- as.list(.x)
@@ -45,8 +45,30 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
   writeLines(function_text, new_file_name)
 })
 
+generic_idx <- map_lgl(parsed$code, ~ {
+  list <- as.list(.x)
+  if (length(list) >= 4) {
+    identical(list[[1]], rlang::sym("setGeneric"))
+  } else {
+    FALSE
+  }
+})
+
+pwalk(parsed[generic_idx, ], function(filename, code, srcref, parse_data) {
+  set_generic_idx <- (parse_data$parent == 0)
+  set_generic_id <- parse_data$id[set_generic_idx]
+
+  # Assuming call by position in setMethod()
+  new_generic_name <- as.character(code[[2]])
+  message(new_generic_name)
+
+  function_text <- parse_data$text[parse_data$parent <= 0]
+  new_file_name <- file.path(dirname(filename), paste0(new_generic_name, ".R"))
+  writeLines(function_text, new_file_name)
+})
+
 rest <-
-  parsed[!method_idx, ] %>%
+  parsed[!method_idx & !generic_idx, ] %>%
   group_by(filename) %>%
   summarize(parse_data_list = list(parse_data)) %>%
   ungroup()
