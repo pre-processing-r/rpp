@@ -42,7 +42,7 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
   name_header <- grep("@name |@rdname ", roxy_header, value = TRUE)
 
   function_text <- paste0(
-    paste0(new_function_header, "\n", collapse = ""),
+    gsub("^\n+", "", paste0(new_function_header, "\n", collapse = "")),
     "#' @usage NULL\n",
     new_method_name, " <- ", parse_data$text[set_method_children_idx][[7]],
     "\n",
