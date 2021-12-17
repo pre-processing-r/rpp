@@ -57,7 +57,7 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
 
 generic_idx <- map_lgl(parsed$code, ~ {
   list <- as.list(.x)
-  if (length(list) >= 4) {
+  if (length(list) >= 1) {
     identical(list[[1]], rlang::sym("setGeneric"))
   } else {
     FALSE
