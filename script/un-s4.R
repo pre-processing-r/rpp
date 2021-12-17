@@ -1,6 +1,16 @@
 pkgload::load_all()
 
-parsed_full <- parse_package("~/git/R/r-dbi/DBI")
+if (!exists("parsed_full")) {
+  parsed_full <- parse_package("~/git/R/r-dbi/DBI")
+}
+
+parsed_nested <-
+  parsed_full %>%
+  nest(data = -filename)
+
+parsed <-
+  parsed_nested[2, ] %>%
+  unnest(data)
 
 method_idx <- map_lgl(parsed$code, ~ {
   list <- as.list(.x)
