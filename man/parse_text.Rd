@@ -2,10 +2,21 @@
 % Please edit documentation in R/parse.R
 \name{parse_text}
 \alias{parse_text}
-\title{Rich parse data for all source files in a package}
+\alias{parse_file}
+\alias{parse_package}
+\title{Rich parse data}
 \usage{
-parse_text(text)
+parse_text(text, filename = NULL)
+
+parse_file(file)
+
+parse_package(path = ".")
+}
+\arguments{
+\item{text}{The text to parse as string.}
+
+\item{file}{The package to parse, must be UTF-8 encoded.}
 }
 \description{
-Returns a tibble with one row per function/object in the package.
+Returns a tibble with one row per function/object in the string, file, or package.
 }

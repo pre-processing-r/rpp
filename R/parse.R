@@ -2,6 +2,8 @@
 #'
 #' Returns a tibble with one row per function/object in the string, file, or package.
 #'
+#' @param text The text to parse as string.
+#'
 #' @export
 parse_text <- function(text, filename = NULL) {
   stopifnot(length(text) == 1)
@@ -37,6 +39,7 @@ parse_text <- function(text, filename = NULL) {
 
 
 #' @rdname parse_text
+#' @param file The file to parse, must be UTF-8 encoded.
 #' @export
 parse_file <- function(file) {
   message(file)
@@ -45,6 +48,7 @@ parse_file <- function(file) {
 }
 
 #' @rdname parse_text
+#' @param file The package to parse, must be UTF-8 encoded.
 #' @export
 parse_package <- function(path = ".") {
   file <- dir(file.path(path, "R"), full.names = TRUE)
