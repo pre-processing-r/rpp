@@ -11,11 +11,12 @@ parse_text <- function(text) {
   parsed <- as.list(expr)
   code <- get_parse_data(expr)
 
+  n_parsed <- length(parsed)
   n_code <- length(code)
-  if (length(parsed) < n_code) {
+  if (n_parsed < n_code) {
     # Bind the last two parse data frames
     stopifnot(all(code[[n_code]]$token == "COMMENT"))
-    n_code_2 <- n_code - 1:0
+    n_code_2 <- n_code - rev(rlang::seq2(0, n_code - n_parsed))
     code <- c(code[-n_code_2], list(bind_rows(code[n_code_2])))
   }
 

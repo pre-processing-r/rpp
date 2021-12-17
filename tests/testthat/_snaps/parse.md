@@ -120,6 +120,37 @@
 ---
 
     Code
+      as.list(parse_text("a <- 1\n#comment\n\n#comment"))
+    Output
+      $parsed
+      $parsed[[1]]
+      a <- 1
+      
+      
+      $srcrefs
+      $srcrefs[[1]]
+      a <- 1
+      
+      
+      $code
+      $code[[1]]
+      # A tibble: 8 x 9
+        line1  col1 line2  col2    id parent token       terminal text    
+        <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr>   
+      1     1     1     1     6     7      0 expr        FALSE    a <- 1  
+      2     1     1     1     1     1      3 SYMBOL      TRUE     a       
+      3     1     1     1     1     3      7 expr        FALSE    a       
+      4     1     3     1     4     2      7 LEFT_ASSIGN TRUE     <-      
+      5     1     6     1     6     4      5 NUM_CONST   TRUE     1       
+      6     1     6     1     6     5      7 expr        FALSE    1       
+      7     2     1     2     8    10      0 COMMENT     TRUE     #comment
+      8     4     1     4     8    15      0 COMMENT     TRUE     #comment
+      
+      
+
+---
+
+    Code
       as.list(parse_text("a <- 1\na <- 2"))
     Output
       $parsed
