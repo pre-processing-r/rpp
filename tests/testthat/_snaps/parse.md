@@ -6,18 +6,18 @@
       $filename
       [1] "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 6 x 9
         line1  col1 line2  col2    id parent token       terminal text  
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr> 
@@ -38,18 +38,18 @@
       $filename
       [1] "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 7 x 9
         line1  col1 line2  col2    id parent token       terminal text             
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr>            
@@ -71,18 +71,18 @@
       $filename
       [1] "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 7 x 9
         line1  col1 line2  col2    id parent token       terminal text            
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr>           
@@ -104,18 +104,18 @@
       $filename
       [1] "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 7 x 9
         line1  col1 line2  col2    id parent token       terminal text              
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr>             
@@ -137,18 +137,18 @@
       $filename
       [1] "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 8 x 9
         line1  col1 line2  col2    id parent token       terminal text    
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr>   
@@ -171,24 +171,24 @@
       $filename
       [1] "<text>" "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      $parsed[[2]]
-      a <- 2
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      $srcrefs[[2]]
-      a <- 2
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      $code[[2]]
+      a <- 2
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      $srcref[[2]]
+      a <- 2
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 6 x 9
         line1  col1 line2  col2    id parent token       terminal text  
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr> 
@@ -199,7 +199,7 @@
       5     1     6     1     6     4      5 NUM_CONST   TRUE     1     
       6     1     6     1     6     5      7 expr        FALSE    1     
       
-      $code[[2]]
+      $parse_data[[2]]
       # A tibble: 6 x 9
         line1  col1 line2  col2    id parent token       terminal text  
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr> 
@@ -220,24 +220,24 @@
       $filename
       [1] "<text>" "<text>"
       
-      $parsed
-      $parsed[[1]]
-      a <- 1
-      
-      $parsed[[2]]
-      a <- 2
-      
-      
-      $srcrefs
-      $srcrefs[[1]]
-      a <- 1
-      
-      $srcrefs[[2]]
-      a <- 2
-      
-      
       $code
       $code[[1]]
+      a <- 1
+      
+      $code[[2]]
+      a <- 2
+      
+      
+      $srcref
+      $srcref[[1]]
+      a <- 1
+      
+      $srcref[[2]]
+      a <- 2
+      
+      
+      $parse_data
+      $parse_data[[1]]
       # A tibble: 6 x 9
         line1  col1 line2  col2    id parent token       terminal text  
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr> 
@@ -248,7 +248,7 @@
       5     1     6     1     6     4      5 NUM_CONST   TRUE     1     
       6     1     6     1     6     5      7 expr        FALSE    1     
       
-      $code[[2]]
+      $parse_data[[2]]
       # A tibble: 6 x 9
         line1  col1 line2  col2    id parent token       terminal text  
         <int> <int> <int> <int> <int>  <int> <chr>       <lgl>    <chr> 

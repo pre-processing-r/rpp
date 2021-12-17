@@ -20,21 +20,21 @@ parse_text <- function(text, filename = NULL) {
   srcrefs <- attr(expr, "srcref")
 
   parsed <- as.list(expr)
-  code <- get_parse_data(expr)
+  parse_data <- get_parse_data(expr)
 
   n_parsed <- length(parsed)
-  n_code <- length(code)
-  if (n_parsed < n_code) {
+  n_parse_data <- length(parse_data)
+  if (n_parsed < n_parse_data) {
     # Bind the last two parse data frames
-    stopifnot(all(code[[n_code]]$token == "COMMENT"))
-    n_code_2 <- n_code - rev(rlang::seq2(0, n_code - n_parsed))
-    code <- c(code[-n_code_2], list(bind_rows(code[n_code_2])))
+    stopifnot(all(parse_data[[n_parse_data]]$token == "COMMENT"))
+    n_parse_data_2 <- n_parse_data - rev(rlang::seq2(0, n_parse_data - n_parsed))
+    parse_data <- c(parse_data[-n_parse_data_2], list(bind_rows(parse_data[n_parse_data_2])))
   }
 
   stopifnot(length(parsed) == length(srcrefs))
-  stopifnot(length(parsed) == length(code))
+  stopifnot(length(parsed) == length(parse_data))
 
-  tibble(filename, parsed, srcrefs, code)
+  tibble(filename, code = parsed, srcref = srcrefs, parse_data)
 }
 
 
