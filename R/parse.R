@@ -83,3 +83,27 @@ get_parse_data <- function(exprs) {
 
   code
 }
+
+get_pd_space <- function(pd) {
+  if (nrow(pd) == 0) {
+    return(character())
+  }
+
+  line1 <- pd$line1
+  col1 <- pd$col1
+  line2 <- pd$line2
+  col2 <- pd$col2
+
+  delta_lines <- lead(line1, default = line2[[length(line2)]]) - line2
+  same_line <- (delta_lines == 0)
+  lead_col1 <- lead(col1, default = col2[[length(col2)]])
+  delta_cols <- lead_col1 - col2
+
+  out <- character(length(line1))
+  out[same_line] <- strrep(" ", pmax(delta_cols[same_line] - 1, 0))
+  out[!same_line] <- paste0(
+    strrep("\n", delta_lines[!same_line]),
+    strrep(" ", lead_col1[!same_line] - 1)
+  )
+  out
+}
