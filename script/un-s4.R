@@ -38,6 +38,7 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
 
   roxy_header <- parse_data$text[parse_data$parent < 0]
   new_function_header <- grep("@export", roxy_header, value = TRUE, invert = TRUE)
+  has_export <- any(grepl("@export", roxy_header))
   name_header <- grep("@name |@rdname ", roxy_header, value = TRUE)
 
   function_text <- paste0(
@@ -47,7 +48,7 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
     "\n",
     "\n",
     name_header, "\n",
-    "#' @export\n",
+    if (has_export) "#' @export\n",
     deparse(code, 500)
   )
 
