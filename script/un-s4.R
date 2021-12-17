@@ -51,8 +51,10 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
     deparse(code, 500)
   )
 
+  styled_function_text <- styler::style_text(function_text, scope = "line_breaks")
+
   new_file_name <- file.path(dirname(filename), paste0(new_method_name, ".R"))
-  writeLines(function_text, new_file_name)
+  writeLines(styled_function_text, new_file_name)
 })
 
 generic_idx <- map_lgl(parsed$code, ~ {
