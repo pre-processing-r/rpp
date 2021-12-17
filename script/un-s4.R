@@ -1,0 +1,57 @@
+pkgload::load_all()
+
+parsed <- parse_package("~/git/R/r-dbi/DBI")
+
+method_idx <- map_lgl(parsed$code, ~ {
+  list <- as.list(.x)
+  if (length(list) >= 4) {
+    identical(list[[1]], rlang::sym("setMethod")) &&
+      is.call(list[[4]]) &&
+      identical(list[[4]][[1]], rlang::sym("function"))
+  } else {
+    FALSE
+  }
+})
+
+pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
+  set_method_idx <- (parse_data$parent == 0)
+  set_method_id <- parse_data$id[set_method_idx]
+  set_method_children_idx <- (parse_data$parent == set_method_id)
+  set_method_children_id <- parse_data$id[set_method_children_idx]
+
+  stopifnot(grepl("^function", parse_data$text[set_method_children_idx][[7]]))
+
+  # Assuming call by position in setMethod()
+  new_method_name <- paste0(c(code[[2]], eval(code[[3]])), collapse = "_")
+  code[[4]] <- rlang::sym(new_method_name)
+  message(new_method_name)
+
+  roxy_header <- parse_data$text[parse_data$parent < 0]
+  new_function_header <- grep("@export", roxy_header, value = TRUE, invert = TRUE)
+  name_header <- grep("@name |@rdname ", roxy_header, value = TRUE)
+
+  function_text <- paste0(
+    paste0(new_function_header, "\n", collapse = ""),
+    "#' @usage NULL\n",
+    new_method_name, " <- ", parse_data$text[set_method_children_idx][[7]],
+    "\n",
+    "\n",
+    name_header, "\n",
+    "#' @export\n",
+    deparse(code, 500)
+  )
+
+  new_file_name <- file.path(dirname(filename), paste0(new_method_name, ".R"))
+  writeLines(function_text, new_file_name)
+})
+
+rest <-
+  parsed[!method_idx, ] %>%
+  group_by(filename) %>%
+  summarize(parse_data_list = list(parse_data)) %>%
+  ungroup()
+
+pwalk(rest, function(filename, parse_data_list) {
+  code_list <- map(parse_data_list, ~ c(.x$text[.x$parent <= 0], ""))
+  writeLines(unlist(code_list), filename)
+})
