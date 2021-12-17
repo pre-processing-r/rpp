@@ -51,6 +51,7 @@ parse_package <- function(path = ".") {
   map_dfr(file, parse_file)
 }
 
+# FIXME: Reimplement for speed
 get_tree_root <- function(id, parent) {
   tree <- data.tree::FromDataFrameNetwork(data.frame(id, parent))
   list <- data.tree::ToListSimple(tree)
