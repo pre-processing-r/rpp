@@ -3,6 +3,9 @@
     Code
       as.list(parse_text("a <- 1"))
     Output
+      $filename
+      [1] "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1
@@ -32,6 +35,9 @@
     Code
       as.list(parse_text("#' roxygen2 block\na <- 1"))
     Output
+      $filename
+      [1] "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1
@@ -62,6 +68,9 @@
     Code
       as.list(parse_text("a <- 1 # inline comment"))
     Output
+      $filename
+      [1] "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1
@@ -92,6 +101,9 @@
     Code
       as.list(parse_text("a <- 1\n# separate comment"))
     Output
+      $filename
+      [1] "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1
@@ -122,6 +134,9 @@
     Code
       as.list(parse_text("a <- 1\n#comment\n\n#comment"))
     Output
+      $filename
+      [1] "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1
@@ -153,6 +168,9 @@
     Code
       as.list(parse_text("a <- 1\na <- 2"))
     Output
+      $filename
+      [1] "<text>" "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1
@@ -199,6 +217,9 @@
     Code
       as.list(parse_text("a <- 1; a <- 2"))
     Output
+      $filename
+      [1] "<text>" "<text>"
+      
       $parsed
       $parsed[[1]]
       a <- 1

@@ -1,11 +1,20 @@
-#' Rich parse data for all source files in a package
+#' Rich parse data
 #'
-#' Returns a tibble with one row per function/object in the package.
+#' Returns a tibble with one row per function/object in the string, file, or package.
 #'
 #' @export
-parse_text <- function(text) {
-  lines <- unlist(strsplit(text, "\n"))
-  expr <- parse(text = text, keep.source = TRUE, srcfile = srcfilecopy("<text>", lines, isFile = TRUE))
+parse_text <- function(text, filename = NULL) {
+  stopifnot(length(text) == 1)
+
+  if (is.null(filename)) {
+    filename <- "<text>"
+  }
+
+  expr <- parse(
+    text = text,
+    keep.source = TRUE,
+    srcfile = srcfilecopy(filename, text, isFile = TRUE)
+  )
   srcrefs <- attr(expr, "srcref")
 
   parsed <- as.list(expr)
@@ -23,28 +32,23 @@ parse_text <- function(text) {
   stopifnot(length(parsed) == length(srcrefs))
   stopifnot(length(parsed) == length(code))
 
-  tibble(parsed, srcrefs, code)
+  tibble(filename, parsed, srcrefs, code)
 }
 
-#' Rich parse data for all source files in a package
-#'
-#' Returns a tibble with one row per function/object in the package.
-#'
+
+#' @rdname parse_text
+#' @export
+parse_file <- function(file) {
+  message(file)
+  text <- brio::read_file(file)
+  parse_text(text, file)
+}
+
+#' @rdname parse_text
 #' @export
 parse_package <- function(path = ".") {
   file <- dir(file.path(path, "R"), full.names = TRUE)
-  parsed <- map(file, parse, keep.source = TRUE)
-  srcrefs <- map(parsed, attr, "srcref")
-
-  parse_data <- map(parsed, get_parse_data)
-
-  nested <- tibble(file, parsed = map(parsed, as.list), srcrefs, code = parse_data)
-
-  stopifnot(lengths(nested$parsed) == lengths(nested$srcrefs))
-  stopifnot(lengths(nested$parsed) == lengths(nested$parse_data))
-
-  #unnest(nested, -file)
-  nested
+  map_dfr(file, parse_file)
 }
 
 get_tree_root <- function(id, parent) {
