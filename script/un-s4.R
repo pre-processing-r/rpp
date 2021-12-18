@@ -1,13 +1,16 @@
 pkgload::load_all()
 
 if (!exists("parsed_full")) {
-  parsed_full <- parse_package("~/git/R/r-dbi/RKazam")
+  parsed_full <- parse_package("~/git/R/r-dbi/RSQLite")
+} else {
+  message("Reusing parse data from ", dirname(dirname(parsed_full$filename[[1]])))
 }
 
 parsed_nested <-
   parsed_full %>%
   nest(data = -filename)
 
+# If necessary, use a slice here
 parsed <-
   parsed_nested[, ] %>%
   unnest(data)
