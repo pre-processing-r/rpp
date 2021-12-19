@@ -24,8 +24,9 @@ RoxygenNote: 7.1.2
 Imports: 
     brio,
     desc,
-    rlang,
+    dplyr,
     purrr,
+    rlang,
     roxygen2
 Suggests: 
     rmarkdown,
