@@ -27,7 +27,8 @@ Imports:
     dplyr,
     purrr,
     rlang,
-    roxygen2
+    roxygen2,
+    tidyr
 Suggests: 
     rmarkdown,
     knitr,
