@@ -36,7 +36,7 @@
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/Q-language/rpp/">
+  <a href="https://github.com/Q-language/rpp/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -51,7 +51,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create Plugin</h1>
-    <small class="dont-index">Source: <a href="https://github.com/Q-language/rpp/blob/master/R/inline_plugin.R"><code>R/inline_plugin.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/Q-language/rpp/blob/HEAD/R/inline_plugin.R" class="external-link"><code>R/inline_plugin.R</code></a></small>
     <div class="hidden name"><code>inline_plugin.Rd</code></div>
     </div>
 
@@ -59,24 +59,25 @@
     <p>Create an inline plugin.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">inline_plugin</span><span class="op">(</span><span class="va">dev</span>, <span class="va">prod</span><span class="op">)</span></code></pre></div>
+    <div id="ref-usage">
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">inline_plugin</span><span class="op">(</span><span class="va">dev</span>, <span class="va">prod</span><span class="op">)</span></code></pre></div>
+    </div>
 
     <div id="arguments">
-    <h2>Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>dev, prod</th>
-      <td><p>Development and production
+    <h2>Arguments</h2>
+    <dl><dt>dev, prod</dt>
+<dd><p>Development and production
 functions to run when in either state. These
 callback function should accept a single argument
 <code>lines</code>, a vector of character strings: the source code where
 each character string is a line of code.
-They also should accept an ellipsis <code>...</code> for future extensibility.</p></td>
-    </tr></table></div>
+They also should accept an ellipsis <code>...</code> for future extensibility.</p></dd>
+</dl></div>
 
-
-    <div id="examples">
-    <h2>Examples<a class="anchor" aria-label="anchor" href="#examples"></a></h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">chg_magrittr_to_native</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lines</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">"\\%&gt;\\%"</span>, <span class="st">"|&gt;"</span>, <span class="va">lines</span><span class="op">)</span></span>
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">chg_magrittr_to_native</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">lines</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\%&gt;\\%"</span>, <span class="st">"|&gt;"</span>, <span class="va">lines</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">code</span> <span class="op">&lt;-</span> <span class="st">'function(x) {</span>
@@ -100,7 +101,7 @@ They also should accept an ellipsis <code>...</code> for future extensibility.</
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
       </footer></div>

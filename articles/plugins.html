@@ -78,7 +78,7 @@
       <h1 data-toc-skip>Creating plugins</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Q-language/rpp/blob/master/vignettes/plugins.Rmd" class="external-link"><code>vignettes/plugins.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Q-language/rpp/blob/HEAD/vignettes/plugins.Rmd" class="external-link"><code>vignettes/plugins.Rmd</code></a></small>
       <div class="hidden name"><code>plugins.Rmd</code></div>
 
     </div>
@@ -89,8 +89,8 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rpp.q-lang.org/">rpp</a></span><span class="op">)</span></code></pre></div>
 <p>This documents how to create plugins for {rpp} so you can extend its functionality. If you’re new to {rpp}, head over to <code>vignette("rpp")</code> for an introduction.</p>
 <p>We build a small plugin to allow switching between the {magrittr} pipe and R’s native pipe. It’s a good use case, the native pipe does require additional dependencies but only works with R &gt;= 4.1.0.</p>
-<div id="creating-the-plugin" class="section level2">
-<h2>Creating the plugin<a class="anchor" aria-label="anchor" href="#creating-the-plugin"></a>
+<div class="section level2">
+<h2 id="creating-the-plugin">Creating the plugin<a class="anchor" aria-label="anchor" href="#creating-the-plugin"></a>
 </h2>
 <p>The only rpp function we need is <code><a href="../reference/inline_plugin.html">inline_plugin()</a></code>. This function only accepts two arguments: <code>dev</code> and <code>prod</code>, both expect callback functions. These callback functions should accept a single argument: a vector of character strings–the source code where each character string is a line of code. For future extensibility they should also accept an ellipsis <code>...</code>.</p>
 <p>First, let’s create the function that will replace the native pipe to magrittr and vice versa: the callback functions.</p>
@@ -116,8 +116,8 @@
 <span class="fu">chg_native_to_magrittr</span><span class="op">(</span><span class="va">native</span><span class="op">)</span>
 <span class="co">#&gt; [1] "cars %&gt;% filter(dist &gt; 60) %&gt;% select(speed)"</span></code></pre></div>
 </div>
-<div id="exporting-the-plugin" class="section level2">
-<h2>Exporting the plugin<a class="anchor" aria-label="anchor" href="#exporting-the-plugin"></a>
+<div class="section level2">
+<h2 id="exporting-the-plugin">Exporting the plugin<a class="anchor" aria-label="anchor" href="#exporting-the-plugin"></a>
 </h2>
 <p>This works, but to be useful we have to integrate it with rpp. Within a package, create the following two functions to switch between pipes, one of these functions does it one way and the other the opposite way.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -137,19 +137,19 @@
     <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
-<div id="using-the-plugin" class="section level2">
-<h2>Using the plugin<a class="anchor" aria-label="anchor" href="#using-the-plugin"></a>
+<div class="section level2">
+<h2 id="using-the-plugin">Using the plugin<a class="anchor" aria-label="anchor" href="#using-the-plugin"></a>
 </h2>
 <p>To use this within a package add your function of choice to the <code>DESCRIPTION</code>.</p>
-<pre><code>Config/rpp/plugins: list(myPkg::rpp_native_to_magrittr)</code></pre>
+<pre><code><span class="va">Config</span><span class="op">/</span><span class="va">rpp</span><span class="op">/</span><span class="va">plugins</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">myPkg</span><span class="fu">::</span><span class="va">rpp_native_to_magrittr</span><span class="op">)</span></code></pre>
 <p>Then toggle between pipes with:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rpp</span><span class="fu">::</span><span class="fu"><a href="../reference/rpp_to_dev.html">rpp_to_dev</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu">rpp</span><span class="fu">::</span><span class="fu"><a href="../reference/rpp_to_prod.html">rpp_to_prod</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>These effectively run the respective dev and prod functions on the source code in the <code>R/</code> directory.</p>
 </div>
-<div id="roxygen2-integration" class="section level2">
-<h2>roxygen2 integration<a class="anchor" aria-label="anchor" href="#roxygen2-integration"></a>
+<div class="section level2">
+<h2 id="roxygen2-integration">roxygen2 integration<a class="anchor" aria-label="anchor" href="#roxygen2-integration"></a>
 </h2>
 <p>The rpp package implements two roxygen2 roclets:</p>
 <ul>
@@ -179,12 +179,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://krlmlr.info" class="external-link external-link">Kirill Müller</a>.</p>
+<p>Developed by <a href="https://krlmlr.info" class="external-link">Kirill Müller</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.9000.9000.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
       </footer>
