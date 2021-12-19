@@ -27,8 +27,9 @@ parse_text <- function(text, filename = NULL) {
   if (n_parsed < n_parse_data) {
     # Bind the last two parse data frames
     stopifnot(all(parse_data[[n_parse_data]]$token == "COMMENT"))
-    n_parse_data_2 <- n_parse_data - rev(rlang::seq2(0, n_parse_data - n_parsed))
-    parse_data <- c(parse_data[-n_parse_data_2], list(bind_rows(parse_data[n_parse_data_2])))
+    extra <- rlang::seq2(n_parsed + 1L, n_parse_data)
+    parsed[extra] <- list(rlang::zap())
+    srcrefs[extra] <- list(rlang::zap())
   }
 
   stopifnot(length(parsed) == length(srcrefs))
