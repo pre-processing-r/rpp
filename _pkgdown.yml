@@ -11,6 +11,7 @@ reference:
 - title: roxygen2 integration
   contents:
   - contains("roclet")
+  - parse_text
 
 development:
   mode: auto
