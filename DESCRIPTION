@@ -23,6 +23,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     brio,
+    data.tree,
     desc,
     dplyr,
     purrr,
