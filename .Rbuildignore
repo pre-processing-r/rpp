@@ -6,3 +6,4 @@ _cache$
 ^\.github$
 ^_pkgdown\.yml$
 ^docs$
+^script$

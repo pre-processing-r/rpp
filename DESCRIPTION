@@ -23,10 +23,13 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     brio,
+    data.tree,
     desc,
-    rlang,
+    dplyr,
     purrr,
-    roxygen2
+    rlang,
+    roxygen2,
+    tidyr
 Suggests: 
     rmarkdown,
     knitr,
