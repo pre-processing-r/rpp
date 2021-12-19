@@ -71,7 +71,7 @@ get_tree_root <- function(id, parent) {
 
 get_parse_data <- function(exprs) {
   pd <-
-    getParseData(exprs, includeText = TRUE) %>%
+    utils::getParseData(exprs, includeText = TRUE) %>%
     arrange(line1, col1, desc(line2), desc(col2), parent) %>%
     as_tibble()
 
