@@ -1,7 +1,9 @@
 pkgload::load_all()
 
+root <- "~/git/R/r-dbi/RSQLite"
+
 if (!exists("parsed_full")) {
-  parsed_full <- parse_package("~/git/R/r-dbi/RSQLite")
+  parsed_full <- parse_package(root)
 } else {
   message("Reusing parse data from ", dirname(dirname(parsed_full$filename[[1]])))
 }
@@ -28,6 +30,7 @@ method_idx <- map_lgl(parsed$code, ~ {
 
 pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
   set_method_idx <- (parse_data$parent == 0)
+  stopifnot(sum(set_method_idx) == 1)
   set_method_id <- parse_data$id[set_method_idx]
   set_method_children_idx <- (parse_data$parent == set_method_id)
   set_method_children_id <- parse_data$id[set_method_children_idx]
@@ -35,7 +38,10 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
   stopifnot(grepl("^function", parse_data$text[set_method_children_idx][[7]]))
 
   # Assuming call by position in setMethod()
-  new_method_name <- paste0(c(code[[2]], eval(code[[3]])), collapse = "_")
+  new_method_name <- paste0(
+    code[[2]], "_",
+    paste0(eval(code[[3]]), collapse = "_")
+  )
   code[[4]] <- rlang::sym(new_method_name)
   message(new_method_name)
 
@@ -44,9 +50,22 @@ pwalk(parsed[method_idx, ], function(filename, code, srcref, parse_data) {
   has_export <- any(grepl("@export", roxy_header))
   name_header <- grep("@name |@rdname ", roxy_header, value = TRUE)
 
+  if (length(name_header) == 0) {
+    name_header <- paste0(
+      "#' @rdname ",
+      gsub("_", "-", new_method_name),
+      "-method"
+    )
+    extra_header <- paste0(name_header, "\n")
+  } else {
+    extra_header <- ""
+  }
+
+
   function_text <- paste0(
     gsub("^\n+", "", paste0(new_function_header, "\n", collapse = "")),
     "#' @usage NULL\n",
+    extra_header,
     new_method_name, " <- ", parse_data$text[set_method_children_idx][[7]],
     "\n",
     "\n",
@@ -90,6 +109,9 @@ rest <-
   ungroup()
 
 pwalk(rest, function(filename, parse_data_list) {
-  code_list <- map(parse_data_list, ~ c(.x$text[.x$parent <= 0], ""))
-  writeLines(unlist(code_list), filename)
+  code_list <- map_chr(parse_data_list, ~ paste(.x$text[.x$parent <= 0], collapse = "\n"))
+  writeLines(paste(code_list, collapse = "\n\n"), filename)
 })
+
+Rcpp::compileAttributes(root)
+devtools::document(root)
