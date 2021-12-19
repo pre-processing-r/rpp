@@ -15,7 +15,11 @@ parse_package(path = ".")
 \arguments{
 \item{text}{The text to parse as string.}
 
-\item{file}{The package to parse, must be UTF-8 encoded.}
+\item{filename}{The file name to attach to the parsed text.}
+
+\item{file}{The file to parse, must be UTF-8 encoded.}
+
+\item{path}{The package to parse, must be UTF-8 encoded.}
 }
 \description{
 Returns a tibble with one row per function/object in the string, file, or package.

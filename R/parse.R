@@ -3,6 +3,7 @@
 #' Returns a tibble with one row per function/object in the string, file, or package.
 #'
 #' @param text The text to parse as string.
+#' @param filename The file name to attach to the parsed text.
 #'
 #' @export
 parse_text <- function(text, filename = NULL) {
@@ -49,7 +50,7 @@ parse_file <- function(file) {
 }
 
 #' @rdname parse_text
-#' @param file The package to parse, must be UTF-8 encoded.
+#' @param path The package to parse, must be UTF-8 encoded.
 #' @export
 parse_package <- function(path = ".") {
   file <- dir(file.path(path, "R"), full.names = TRUE)
